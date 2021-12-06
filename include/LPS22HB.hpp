@@ -8,7 +8,7 @@ class LPS22HB : public BaseSensor
 public:
     LPS22HB()
     {
-        this->Name = "LPS22HB";
+        this->Name = (char*) std::string("LPS22HB").c_str();
         CommandCharacteristic = new BLECharacteristic("0FBA45BE-2DFE-45FF-9F52-9FD737380605", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
         NotifyCharacteristic = new BLECharacteristic("FBF457D8-AF8B-4A22-A60F-49AFA64FA962", BLERead | BLENotify, 5, true);        
     }

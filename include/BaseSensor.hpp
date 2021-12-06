@@ -14,29 +14,29 @@ using namespace rtos;
 #define ANALOG_COMMAND_SIZE 6
 #define DIGITAL_COMMAND_SIZE 5
 
-void printhex(uint8_t *data, size_t length, bool endl = false)
-{
-    int i;
-    for (i = 0; i < length; i++)
-    {
-        if (i > 0)
-            printf(":");
-        printf("%02X", data[i]);
-    }
-    if (endl)
-        printf("\n");
-}
+// void printhex(uint8_t *data, size_t length, bool endl = false)
+// {
+//     int i;
+//     for (i = 0; i < length; i++)
+//     {
+//         if (i > 0)
+//             printf(":");
+//         printf("%02X", data[i]);
+//     }
+//     if (endl)
+//         printf("\n");
+// }
 
-std::string hexStr(uint8_t *data, int len)
-{
-    std::stringstream ss;
-    ss << std::hex;
+// std::string hexStr(uint8_t *data, int len)
+// {
+//     std::stringstream ss;
+//     ss << std::hex;
 
-    for (int i(0); i < len; ++i)
-        ss << std::setw(2) << std::setfill('0') << (int)data[i];
+//     for (int i(0); i < len; ++i)
+//         ss << std::setw(2) << std::setfill('0') << (int)data[i];
 
-    return ss.str();
-}
+//     return ss.str();
+// }
 
 class BaseSensor
 {
@@ -53,17 +53,14 @@ public:
     void CommandHandler(BLEDevice device, BLECharacteristic characteristic)
     {
 
-        int length = characteristic.valueLength();
-        uint8_t buffer[length];
-        characteristic.readValue(buffer, length);
-
-        printf("CommandHandler. Data length: %d. Data: ", length);
-        printhex(buffer, length, true);
-
+        // int length = characteristic.valueLength();
+        uint8_t buffer[8];
+        characteristic.readValue(buffer, 8);        
         uint8_t command = buffer[0];
         if (command == 0x01)
         {
             this->PoolingInterval = (uint32_t)(buffer[1] << 24) | (uint32_t)(buffer[2] << 16) | (uint32_t)(buffer[3] << 8) | (uint32_t)buffer[4];
+            printf("Starting %s with %lu ms interval\n", this->Name, this->PoolingInterval);
             if (this->IsAnalog)
             {
                 this->AnalogPort = buffer[5] == 0x00 ? A0 : A1;
@@ -75,8 +72,9 @@ public:
         }
         else
         {
+            printf("Stopping %s\n", this->Name);
             if (this->run_thread)
-            {
+            {                
                 this->run_thread->terminate();
                 delete this->run_thread;
                 this->post_loop();
@@ -98,7 +96,7 @@ private:
             uint32_t end_time = micros() / 1000;
             int32_t delta = PoolingInterval - (end_time - start_time);
             if (delta > 0)
-                rtos::ThisThread::sleep_for(delta);
+                rtos::ThisThread::sleep_for(std::chrono::milliseconds(delta));
             rtos::ThisThread::yield();
         }
     }
