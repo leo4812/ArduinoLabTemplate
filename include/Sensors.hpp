@@ -3,11 +3,13 @@
 #include "LPS22HB.hpp"
 #include "MagnetPole.hpp"
 #include "SEN0304.hpp"
+#include "MLX90614.hpp"
 
 
 LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
 SEN0304 *SEN0304_sensor;
+MLX90614 *MLX90614_sensor;
 
 void init_sensors(BLEService service)
 {
@@ -28,4 +30,10 @@ void init_sensors(BLEService service)
     SEN0304_sensor->CommandCharacteristic->setEventHandler(BLEWritten, SEN0304_sensor_command_callback);
     service.addCharacteristic(*(SEN0304_sensor->CommandCharacteristic));
     service.addCharacteristic(*(SEN0304_sensor->NotifyCharacteristic));
+
+    MLX90614_sensor = new MLX90614();
+    auto MLX90614_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { MLX90614_sensor->CommandHandler(device, characteristic); };
+    MLX90614_sensor->CommandCharacteristic->setEventHandler(BLEWritten, MLX90614_sensor_command_callback);
+    service.addCharacteristic(*(MLX90614_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(MLX90614_sensor->NotifyCharacteristic));
 }

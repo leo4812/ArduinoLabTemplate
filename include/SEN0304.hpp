@@ -30,7 +30,7 @@ typedef enum
 #define CMD_DISTANCE_MEASURE (0x01)
 
 unsigned char addr0 = 0x11;
-// asdfsdfs
+
 class SEN0304 : public BaseSensor
 {
 
@@ -48,7 +48,7 @@ private:
         Wire.begin();
         txbuf[0] = (MEASURE_MODE_PASSIVE | MEASURE_RANG_500); // the measurement mode is set to passive mode, measurement range is set to 500CM.
         i2cWriteBytes(addr0, CFG_INDEX, &txbuf[0], 1);        //
-        delay(100);        
+        delay(100);
     }
 
     void i2cWriteBytes(unsigned char addr_t, unsigned char Reg, unsigned char *pdata, unsigned char datalen)
