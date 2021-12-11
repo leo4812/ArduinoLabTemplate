@@ -110,3 +110,9 @@ void init_sensors(BLEService service)
     service.addCharacteristic(*(MagnetPole_sensor->NotifyCharacteristic));
 }
 ```
+
+
+
+
+// git push --set-upstream origin Kulikov   (На локальный гит)
+// git push -u gitHub   (На гитхаб)
