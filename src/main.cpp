@@ -15,11 +15,14 @@ void setup()
   pinMode(LED_RED, OUTPUT);
   digitalWrite(LED_RED, HIGH);
   analogReadResolution(12);
-  
-  #ifdef DEBUG
+
+#ifdef DEBUG
   Serial.begin(115200);
-  while (!Serial)  { delay(1); }
-  #endif
+// while (!Serial)
+//  {
+//    delay(1);
+//  }
+#endif
 
   if (BLE.begin())
   {
@@ -56,7 +59,7 @@ void setup()
       delay(50);
       digitalWrite(LED_RED, HIGH);
       delay(50);
-      digitalWrite(LED_RED, LOW);      
+      digitalWrite(LED_RED, LOW);
       delay(1000);
     }
   }

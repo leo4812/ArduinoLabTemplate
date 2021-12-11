@@ -98,7 +98,6 @@ private:
             0,
         };
         memcpy(&buffer[1], (uint8_t *)&dist, sizeof(dist));
-        memcpy(&buffer[3], (uint8_t *)&temp, sizeof(temp));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
