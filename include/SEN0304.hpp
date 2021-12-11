@@ -30,7 +30,7 @@ typedef enum
 #define CMD_DISTANCE_MEASURE (0x01)
 
 unsigned char addr0 = 0x11;
-
+// asdfsdfs
 class SEN0304 : public BaseSensor
 {
 
