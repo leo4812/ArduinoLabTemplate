@@ -60,7 +60,8 @@ public:
         if (command == 0x01)
         {
             this->PoolingInterval = (uint32_t)(buffer[1] << 24) | (uint32_t)(buffer[2] << 16) | (uint32_t)(buffer[3] << 8) | (uint32_t)buffer[4];
-            printf("Starting %s with %lu ms interval\n", this->Name, this->PoolingInterval);
+            Serial.println(this->PoolingInterval);
+            printf("Starting %s with %lu ms interval\n", this->Name, this->PoolingInterval);            
             if (this->IsAnalog)
             {
                 this->AnalogPort = buffer[5] == 0x00 ? A0 : A1;
