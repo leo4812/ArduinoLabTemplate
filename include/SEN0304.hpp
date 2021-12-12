@@ -82,7 +82,8 @@ private:
     void post_loop() {}
     void loop()
     {
-        int16_t dist, temp;
+        int16_t dist;
+        //int16_t temp;
         txbuf[0] = CMD_DISTANCE_MEASURE;
 
         i2cWriteBytes(addr0, CMD_INDEX, &txbuf[0], 1); // write register, send ranging command
@@ -91,13 +92,14 @@ private:
         i2cReadBytes(addr0, DIST_H_INDEX, 2); // read distance register
         dist = ((uint16_t)rxbuf[0] << 8) + rxbuf[1];
 
-        i2cReadBytes(addr0, TEMP_H_INDEX, 2); // read temperature register
-        temp = ((uint16_t)rxbuf[0] << 8) + rxbuf[1];
+       // i2cReadBytes(addr0, TEMP_H_INDEX, 2); // read temperature register
+       // temp = ((uint16_t)rxbuf[0] << 8) + rxbuf[1];
 
         uint8_t buffer[5] = {
             0,
         };
         memcpy(&buffer[1], (uint8_t *)&dist, sizeof(dist));
+
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
