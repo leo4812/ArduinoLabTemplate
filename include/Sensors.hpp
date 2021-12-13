@@ -11,6 +11,7 @@
 #include "TDS.hpp"
 #include "PH.hpp"
 #include "voltage.hpp"
+#include "ACS712.hpp"
 
 
 
@@ -25,6 +26,8 @@ MPX5050GP *MPX5050GP_sensor;
 TDS *TDS_sensor;
 PH *PH_sensor;
 voltage *voltage_sensor;
+ACS712 *ACS712_sensor;
+
 
 
 
@@ -95,4 +98,10 @@ void init_sensors(BLEService service)
     voltage_sensor->CommandCharacteristic->setEventHandler(BLEWritten, voltage_sensor_command_callback);
     service.addCharacteristic(*(voltage_sensor->CommandCharacteristic));
     service.addCharacteristic(*(voltage_sensor->NotifyCharacteristic));
+
+    ACS712_sensor = new ACS712();
+    auto ACS712_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { ACS712_sensor->CommandHandler(device, characteristic); };
+    ACS712_sensor->CommandCharacteristic->setEventHandler(BLEWritten, ACS712_sensor_command_callback);
+    service.addCharacteristic(*(ACS712_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(ACS712_sensor->NotifyCharacteristic));
 }
