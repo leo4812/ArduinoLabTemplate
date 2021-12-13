@@ -9,6 +9,7 @@
 #include "MPX5700DP.hpp"
 #include "MPX5050GP.hpp"
 #include "TDS.hpp"
+#include "PH.hpp"
 
 
 LPS22HB *LPS22HB_sensor;
@@ -20,6 +21,7 @@ RadSens *RadSens_sensor;
 MPX5700DP *MPX5700DP_sensor;
 MPX5050GP *MPX5050GP_sensor;
 TDS *TDS_sensor;
+PH *PH_sensor;
 
 
 void init_sensors(BLEService service)
@@ -77,4 +79,10 @@ void init_sensors(BLEService service)
     TDS_sensor->CommandCharacteristic->setEventHandler(BLEWritten, TDS_sensor_command_callback);
     service.addCharacteristic(*(TDS_sensor->CommandCharacteristic));
     service.addCharacteristic(*(TDS_sensor->NotifyCharacteristic));
+
+    PH_sensor = new PH();
+    auto PH_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { PH_sensor->CommandHandler(device, characteristic); };
+    PH_sensor->CommandCharacteristic->setEventHandler(BLEWritten, PH_sensor_command_callback);
+    service.addCharacteristic(*(PH_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(PH_sensor->NotifyCharacteristic));
 }
