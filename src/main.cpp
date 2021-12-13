@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #define DEBUG
+//#define LED_RED 22
 
 #ifdef DEBUG
 REDIRECT_STDOUT_TO(Serial);
