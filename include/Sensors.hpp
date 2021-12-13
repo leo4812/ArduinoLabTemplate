@@ -6,6 +6,7 @@
 #include "MLX90614.hpp"
 #include "MAX30102.hpp"
 #include "RadSens.hpp"
+#include "MPX5700DP.hpp"
 
 LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
@@ -13,6 +14,7 @@ SEN0304 *SEN0304_sensor;
 MLX90614 *MLX90614_sensor;
 MAX30102 *MAX30102_sensor;
 RadSens *RadSens_sensor;
+MPX5700DP *MPX5700DP_sensor;
 
 
 void init_sensors(BLEService service)
@@ -52,4 +54,10 @@ void init_sensors(BLEService service)
     RadSens_sensor->CommandCharacteristic->setEventHandler(BLEWritten, RadSens_sensor_command_callback);
     service.addCharacteristic(*(RadSens_sensor->CommandCharacteristic));
     service.addCharacteristic(*(RadSens_sensor->NotifyCharacteristic));
+
+    MPX5700DP_sensor = new MPX5700DP();
+    auto MPX5700DP_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { MPX5700DP_sensor->CommandHandler(device, characteristic); };
+    MPX5700DP_sensor->CommandCharacteristic->setEventHandler(BLEWritten, MPX5700DP_sensor_command_callback);
+    service.addCharacteristic(*(MPX5700DP_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(MPX5700DP_sensor->NotifyCharacteristic));
 }
