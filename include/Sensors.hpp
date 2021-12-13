@@ -8,6 +8,7 @@
 #include "RadSens.hpp"
 #include "MPX5700DP.hpp"
 #include "MPX5050GP.hpp"
+#include "TDS.hpp"
 
 
 LPS22HB *LPS22HB_sensor;
@@ -18,6 +19,7 @@ MAX30102 *MAX30102_sensor;
 RadSens *RadSens_sensor;
 MPX5700DP *MPX5700DP_sensor;
 MPX5050GP *MPX5050GP_sensor;
+TDS *TDS_sensor;
 
 
 void init_sensors(BLEService service)
@@ -69,4 +71,10 @@ void init_sensors(BLEService service)
     MPX5050GP_sensor->CommandCharacteristic->setEventHandler(BLEWritten, MPX5050GP_sensor_command_callback);
     service.addCharacteristic(*(MPX5050GP_sensor->CommandCharacteristic));
     service.addCharacteristic(*(MPX5050GP_sensor->NotifyCharacteristic));
+
+    TDS_sensor = new TDS();
+    auto TDS_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { TDS_sensor->CommandHandler(device, characteristic); };
+    TDS_sensor->CommandCharacteristic->setEventHandler(BLEWritten, TDS_sensor_command_callback);
+    service.addCharacteristic(*(TDS_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(TDS_sensor->NotifyCharacteristic));
 }
