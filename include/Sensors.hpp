@@ -10,6 +10,8 @@
 #include "MPX5050GP.hpp"
 #include "TDS.hpp"
 #include "PH.hpp"
+#include "voltage.hpp"
+
 
 
 LPS22HB *LPS22HB_sensor;
@@ -22,6 +24,8 @@ MPX5700DP *MPX5700DP_sensor;
 MPX5050GP *MPX5050GP_sensor;
 TDS *TDS_sensor;
 PH *PH_sensor;
+voltage *voltage_sensor;
+
 
 
 void init_sensors(BLEService service)
@@ -85,4 +89,10 @@ void init_sensors(BLEService service)
     PH_sensor->CommandCharacteristic->setEventHandler(BLEWritten, PH_sensor_command_callback);
     service.addCharacteristic(*(PH_sensor->CommandCharacteristic));
     service.addCharacteristic(*(PH_sensor->NotifyCharacteristic));
+
+    voltage_sensor = new voltage();
+    auto voltage_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { voltage_sensor->CommandHandler(device, characteristic); };
+    voltage_sensor->CommandCharacteristic->setEventHandler(BLEWritten, voltage_sensor_command_callback);
+    service.addCharacteristic(*(voltage_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(voltage_sensor->NotifyCharacteristic));
 }
