@@ -13,6 +13,9 @@
 #include "voltage.hpp"
 #include "ACS712.hpp"
 #include "DS18B20.hpp"
+//#include "BLUXV30B.hpp"
+//#include "MAX31855.hpp"
+
 
 
 
@@ -30,6 +33,10 @@ PH *PH_sensor;
 voltage *voltage_sensor;
 ACS712 *ACS712_sensor;
 DS18B20 *DS18B20_sensor;
+//BLUXV30B * BLUXV30B_sensor;
+//MAX31855 *MAX31855_sensor;
+
+
 
 
 
@@ -114,4 +121,20 @@ void init_sensors(BLEService service)
     DS18B20_sensor->CommandCharacteristic->setEventHandler(BLEWritten, DS18B20_sensor_command_callback);
     service.addCharacteristic(*(DS18B20_sensor->CommandCharacteristic));
     service.addCharacteristic(*(DS18B20_sensor->NotifyCharacteristic));
+
+ /*
+    BLUXV30B_sensor = new BLUXV30B();
+    auto BLUXV30B_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { BLUXV30B_sensor->CommandHandler(device, characteristic); };
+    BLUXV30B_sensor->CommandCharacteristic->setEventHandler(BLEWritten, BLUXV30B_sensor_command_callback);
+    service.addCharacteristic(*(BLUXV30B_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(BLUXV30B_sensor->NotifyCharacteristic));
+
+    
+
+    MAX31855_sensor = new MAX31855();
+    auto MAX31855_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { MAX31855_sensor->CommandHandler(device, characteristic); };
+    MAX31855_sensor->CommandCharacteristic->setEventHandler(BLEWritten, MAX31855_sensor_command_callback);
+    service.addCharacteristic(*(MAX31855_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(MAX31855_sensor->NotifyCharacteristic));
+    */
 }
