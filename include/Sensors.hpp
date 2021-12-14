@@ -12,6 +12,8 @@
 #include "PH.hpp"
 #include "voltage.hpp"
 #include "ACS712.hpp"
+#include "DS18B20.hpp"
+
 
 
 
@@ -27,6 +29,8 @@ TDS *TDS_sensor;
 PH *PH_sensor;
 voltage *voltage_sensor;
 ACS712 *ACS712_sensor;
+DS18B20 *DS18B20_sensor;
+
 
 
 
@@ -104,4 +108,10 @@ void init_sensors(BLEService service)
     ACS712_sensor->CommandCharacteristic->setEventHandler(BLEWritten, ACS712_sensor_command_callback);
     service.addCharacteristic(*(ACS712_sensor->CommandCharacteristic));
     service.addCharacteristic(*(ACS712_sensor->NotifyCharacteristic));
+
+    DS18B20_sensor = new DS18B20();
+    auto DS18B20_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { DS18B20_sensor->CommandHandler(device, characteristic); };
+    DS18B20_sensor->CommandCharacteristic->setEventHandler(BLEWritten, DS18B20_sensor_command_callback);
+    service.addCharacteristic(*(DS18B20_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(DS18B20_sensor->NotifyCharacteristic));
 }
