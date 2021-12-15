@@ -1,9 +1,10 @@
-/* #include <Arduino.h>
+/*
+
+#include <Arduino.h>
 #include "BaseSensor.hpp"
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_BusIO_Register.h>
 
-// НЕ ДОБАВЛЯЛ САМИ БИБЛИОТЕКИ
 
 uint8_t blux_i2c_addr = (uint8_t) 0x4A;
 

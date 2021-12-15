@@ -34,5 +34,4 @@ private:
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
-
 */

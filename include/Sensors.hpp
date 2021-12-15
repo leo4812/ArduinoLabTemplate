@@ -16,6 +16,7 @@
 //#include "BLUXV30B.hpp"
 //#include "MAX31855.hpp"
 #include "SHT20.hpp"
+#include "M135Q.hpp"
 
 
 
@@ -37,7 +38,7 @@ DS18B20 *DS18B20_sensor;
 //BLUXV30B * BLUXV30B_sensor;
 //MAX31855 *MAX31855_sensor;
 SHT20 *SHT20_sensor;
-
+M135Q *M135Q_sensor;
 
 
 
@@ -123,8 +124,8 @@ void init_sensors(BLEService service)
     DS18B20_sensor->CommandCharacteristic->setEventHandler(BLEWritten, DS18B20_sensor_command_callback);
     service.addCharacteristic(*(DS18B20_sensor->CommandCharacteristic));
     service.addCharacteristic(*(DS18B20_sensor->NotifyCharacteristic));
-
- /*
+/*
+ 
     BLUXV30B_sensor = new BLUXV30B();
     auto BLUXV30B_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { BLUXV30B_sensor->CommandHandler(device, characteristic); };
     BLUXV30B_sensor->CommandCharacteristic->setEventHandler(BLEWritten, BLUXV30B_sensor_command_callback);
@@ -145,4 +146,10 @@ void init_sensors(BLEService service)
     SHT20_sensor->CommandCharacteristic->setEventHandler(BLEWritten, SHT20_sensor_command_callback);
     service.addCharacteristic(*(SHT20_sensor->CommandCharacteristic));
     service.addCharacteristic(*(SHT20_sensor->NotifyCharacteristic));
+
+    M135Q_sensor = new M135Q();
+    auto M135Q_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { M135Q_sensor->CommandHandler(device, characteristic); };
+    M135Q_sensor->CommandCharacteristic->setEventHandler(BLEWritten, M135Q_sensor_command_callback);
+    service.addCharacteristic(*(M135Q_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(M135Q_sensor->NotifyCharacteristic));
 }
