@@ -15,6 +15,7 @@
 #include "DS18B20.hpp"
 //#include "BLUXV30B.hpp"
 //#include "MAX31855.hpp"
+#include "SHT20.hpp"
 
 
 
@@ -35,6 +36,7 @@ ACS712 *ACS712_sensor;
 DS18B20 *DS18B20_sensor;
 //BLUXV30B * BLUXV30B_sensor;
 //MAX31855 *MAX31855_sensor;
+SHT20 *SHT20_sensor;
 
 
 
@@ -137,4 +139,10 @@ void init_sensors(BLEService service)
     service.addCharacteristic(*(MAX31855_sensor->CommandCharacteristic));
     service.addCharacteristic(*(MAX31855_sensor->NotifyCharacteristic));
     */
+
+    SHT20_sensor = new SHT20();
+    auto SHT20_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { SHT20_sensor->CommandHandler(device, characteristic); };
+    SHT20_sensor->CommandCharacteristic->setEventHandler(BLEWritten, SHT20_sensor_command_callback);
+    service.addCharacteristic(*(SHT20_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(SHT20_sensor->NotifyCharacteristic));
 }
