@@ -58,7 +58,7 @@ private:
     {        
         float Rad = radSens.getRadIntensyStatic();
         uint8_t buffer[5] = {0,};
-        memcpy(&buffer[1], (uint8_t *)&Rad, 4);
+        memcpy(&buffer[1], (uint8_t *)&Rad, sizeof(Rad));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
