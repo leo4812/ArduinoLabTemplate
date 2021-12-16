@@ -9,8 +9,8 @@ public:
     {
         this->Name =  (char*) "TDS";
         this->IsAnalog = true;
-        CommandCharacteristic = new BLECharacteristic("FE0BECBC-6B15-4BEB-89EA-7FE670BC75C9", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("89117508-0D7E-47CC-9688-09177F4E979B", BLERead | BLENotify, 6, true);
+        CommandCharacteristic = new BLECharacteristic("F5A6BDC2-721D-4CDA-84D1-7C0BABE477CA", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("09E87A27-D787-455C-9F36-488A6674B73F", BLERead | BLENotify, 6, true);
     }
 
 private:

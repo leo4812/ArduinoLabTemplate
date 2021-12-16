@@ -5,14 +5,9 @@
 #include "MAX30105.h"  //  Подключаем библиотеку для работы с модулем
 #include "heartRate.h" //  Подключаем блок для работы с ЧСС (пульс)
 
-MAX30105 PARTICLE_SENSOR; //  Создаём объект для работы с библиотекой
+// const byte RATE_SIZE = 10; //  Коэффициент усреднения. ЧЕм больше число, тем больше усреднение показаний.
 
-const byte RATE_SIZE = 4; //  Коэффициент усреднения. ЧЕм больше число, тем больше усреднение показаний.
-byte rates[RATE_SIZE];    //  Массив со значениями ЧСС
-byte rateSpot = 0;        //  Переменная с порядковым номером значения в массиве
-long lastBeat = 0;        //  Время последнего зафиксированного удара
-float beatsPerMinute;     //  Создаём переменную для хранения значения ЧСС
-int beatAvg;              //  Создаём переменную для хранения усреднённого значения ЧСС
+// bool ErrorMAX30102 = false; //Датчик не подключен
 
 class MAX30102 : public BaseSensor
 {
@@ -20,15 +15,34 @@ class MAX30102 : public BaseSensor
 public:
     MAX30102()
     {
+
         this->Name = (char *)"MAX30102";
         CommandCharacteristic = new BLECharacteristic("9abe01bf-55d3-4ae2-bc09-edb1a6c209c7", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
         NotifyCharacteristic = new BLECharacteristic("ccf0279b-f3c5-4366-8b65-5dfd2d6741f8", BLERead | BLENotify, 5, true);
     }
 
 private:
+    bool ErrorMAX30102 = false; //Датчик не подключен
+
+    MAX30105 PARTICLE_SENSOR; //  Создаём объект для работы с библиотекой
+
+    byte rates[10];       //  Массив со значениями ЧСС
+    byte rateSpot = 0;    //  Переменная с порядковым номером значения в массиве
+    long lastBeat = 0;    //  Время последнего зафиксированного удара
+    float beatsPerMinute; //  Создаём переменную для хранения значения ЧСС
+    int beatAvg;          //  Создаём переменную для хранения усреднённого значения ЧСС
+
     void pre_loop()
     {
-        PARTICLE_SENSOR.begin();
+
+        if (!PARTICLE_SENSOR.begin())
+        {                         //  Инициируем работу с модулем. Если инициализация не прошла, то
+            ErrorMAX30102 = true; //  выводим сообщение об этом в монитор последовательного порта
+        }
+        else
+        {
+            ErrorMAX30102 = false;
+        }
 
         PARTICLE_SENSOR.setup();                    //  Устанавливаем настройки для сенсора по умолчанию
         PARTICLE_SENSOR.setPulseAmplitudeRed(0x0A); //  Выключаем КРАСНЫЙ светодиод для того, чтобы модуль начал работу
@@ -47,31 +61,49 @@ private:
             if (beatsPerMinute < 255 && beatsPerMinute > 20)
             {                                             //  Если количество ударов в минуту находится в промежутке между 20 и 255, то
                 rates[rateSpot++] = (byte)beatsPerMinute; //  записываем это значение в массив значений ЧСС
-                rateSpot %= RATE_SIZE;                    //  Задаём порядковый номер значения в массиве, возвращая остаток от деления и присваивая его переменной rateSpot
+                rateSpot %= 10;                           //  Задаём порядковый номер значения в массиве, возвращая остаток от деления и присваивая его переменной rateSpot
                 beatAvg = 0;                              //  Обнуляем переменную и
-                for (byte x = 0; x < RATE_SIZE; x++)
+                for (byte x = 0; x < 10; x++)
                 {                        //  в цикле выполняем усреднение значений (чем больше RATE_SIZE, тем сильнее усреднение)
                     beatAvg += rates[x]; //  путём сложения всех элементов массива
                 }
-                beatAvg /= RATE_SIZE; //  а затем деления всей суммы на коэффициент усреднения (на общее количество элементов в массиве)
+                beatAvg /= 10; //  а затем деления всей суммы на коэффициент усреднения (на общее количество элементов в массиве)
             }
         }
 
         float BPM;
 
+        Serial.print("  Отдает датчик: ");
+        Serial.print(beatAvg);
+        Serial.print("  неусредненное значение: ");
+        Serial.println(beatsPerMinute);
+
         if (irValue < 50000)
         {
             BPM = 0;
+            Serial.println("Ошибка   irValue < 50000");
         }
         else
         {
             BPM = beatAvg;
+            Serial.print("Условие else");
+            Serial.print("  Переменная: ");
+            Serial.println(BPM);
         }
 
         uint8_t buffer[5] = {
             0,
         };
-        memcpy(&buffer[1], (uint8_t *)&BPM, sizeof(BPM));
+
+        if (ErrorMAX30102 == true)
+        {
+            buffer[0] = 1;
+        }
+        else
+        {
+
+            memcpy(&buffer[1], (uint8_t *)&BPM, sizeof(BPM));
+        }
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
