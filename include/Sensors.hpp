@@ -17,6 +17,7 @@
 //#include "MAX31855.hpp"
 #include "SHT20.hpp"
 #include "M135Q.hpp"
+#include "M7Q.hpp"
 
 
 
@@ -39,6 +40,9 @@ DS18B20 *DS18B20_sensor;
 //MAX31855 *MAX31855_sensor;
 SHT20 *SHT20_sensor;
 M135Q *M135Q_sensor;
+M7Q *M7Q_sensor;
+
+
 
 
 
@@ -152,4 +156,11 @@ void init_sensors(BLEService service)
     M135Q_sensor->CommandCharacteristic->setEventHandler(BLEWritten, M135Q_sensor_command_callback);
     service.addCharacteristic(*(M135Q_sensor->CommandCharacteristic));
     service.addCharacteristic(*(M135Q_sensor->NotifyCharacteristic));
+
+    M7Q_sensor = new M7Q();
+    auto M7Q_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { M7Q_sensor->CommandHandler(device, characteristic); };
+    M7Q_sensor->CommandCharacteristic->setEventHandler(BLEWritten, M7Q_sensor_command_callback);
+    service.addCharacteristic(*(M7Q_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(M7Q_sensor->NotifyCharacteristic));
+
 }
