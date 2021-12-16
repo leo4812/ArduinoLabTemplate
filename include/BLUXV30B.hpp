@@ -38,6 +38,7 @@ private:
         };
         float lux = ((float)val * 1.4) / 1000.0;
         memcpy(&s[1], &lux, sizeof(lux));
+        this->NotifyCharacteristic->writeValue(s, sizeof(s));
     }
 };
 */

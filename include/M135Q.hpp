@@ -49,7 +49,7 @@ private:
 
         memcpy(&buffer[2], (uint8_t *)&co2, 4);
 
-        memcpy(&buffer[6], &value, sizeof(value));
+        memcpy(&buffer[6], &value, 2);
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };

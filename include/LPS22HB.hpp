@@ -23,7 +23,7 @@ private:
     {        
         float pressure = BARO.readPressure();
         uint8_t buffer[5] = {0,};
-        memcpy(&buffer[1], (uint8_t *)&pressure, 4);
+        memcpy(&buffer[1], (uint8_t *)&pressure, sizeof(pressure));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };

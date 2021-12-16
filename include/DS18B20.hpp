@@ -34,7 +34,7 @@ private:
         uint8_t buffer[5] = {
             0,
         };
-        memcpy(&buffer[1], (uint8_t *)&temp, 4);
+        memcpy(&buffer[1], (uint8_t *)&temp, sizeof(temp));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };

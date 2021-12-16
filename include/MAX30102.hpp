@@ -71,7 +71,7 @@ private:
         uint8_t buffer[5] = {
             0,
         };
-        memcpy(&buffer[1], (uint8_t *)&BPM, 4);
+        memcpy(&buffer[1], (uint8_t *)&BPM, sizeof(BPM));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };

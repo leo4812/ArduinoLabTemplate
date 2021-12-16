@@ -37,7 +37,7 @@ private:
         }
         else
         {
-            buffer[0] = 0;
+            //buffer[0] = 0;
             memcpy(&buffer[1], (uint8_t *)&temp_c, 4);
             memcpy(&buffer[5], (uint8_t *)&hum, 4);
             
