@@ -19,6 +19,7 @@
 #include "M135Q.hpp"
 #include "M7Q.hpp"
 #include "HW416.hpp"
+#include "Dinamometr.hpp"
 
 
 
@@ -43,6 +44,7 @@ SHT20 *SHT20_sensor;
 M135Q *M135Q_sensor;
 M7Q *M7Q_sensor;
 HW416 *HW416_sensor;
+Dinamometr *Dinamometr_sensor;
 
 
 
@@ -171,5 +173,11 @@ void init_sensors(BLEService service)
     HW416_sensor->CommandCharacteristic->setEventHandler(BLEWritten, HW416_sensor_command_callback);
     service.addCharacteristic(*(HW416_sensor->CommandCharacteristic));
     service.addCharacteristic(*(HW416_sensor->NotifyCharacteristic));
+
+    Dinamometr_sensor = new Dinamometr();
+    auto Dinamometr_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { Dinamometr_sensor->CommandHandler(device, characteristic); };
+    Dinamometr_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Dinamometr_sensor_command_callback);
+    service.addCharacteristic(*(Dinamometr_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Dinamometr_sensor->NotifyCharacteristic));
 
 }
