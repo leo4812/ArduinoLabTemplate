@@ -18,6 +18,7 @@
 #include "SHT20.hpp"
 #include "M135Q.hpp"
 #include "M7Q.hpp"
+#include "HW416.hpp"
 
 
 
@@ -41,6 +42,8 @@ DS18B20 *DS18B20_sensor;
 SHT20 *SHT20_sensor;
 M135Q *M135Q_sensor;
 M7Q *M7Q_sensor;
+HW416 *HW416_sensor;
+
 
 
 
@@ -162,5 +165,11 @@ void init_sensors(BLEService service)
     M7Q_sensor->CommandCharacteristic->setEventHandler(BLEWritten, M7Q_sensor_command_callback);
     service.addCharacteristic(*(M7Q_sensor->CommandCharacteristic));
     service.addCharacteristic(*(M7Q_sensor->NotifyCharacteristic));
+
+    HW416_sensor = new HW416();
+    auto HW416_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { HW416_sensor->CommandHandler(device, characteristic); };
+    HW416_sensor->CommandCharacteristic->setEventHandler(BLEWritten, HW416_sensor_command_callback);
+    service.addCharacteristic(*(HW416_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(HW416_sensor->NotifyCharacteristic));
 
 }
