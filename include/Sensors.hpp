@@ -28,6 +28,9 @@
 #include "Pcl.hpp"
 #include "Electrocardiogram.hpp"
 #include "datUF.hpp"
+#include "Amoniy.hpp"
+#include "Calciy.hpp"
+
 
 
 
@@ -59,6 +62,10 @@ BloodPressure *BloodPressure_sensor;
 Pcl *Pcl_sensor;
 Electrocardiogram *Electrocardiogram_sensor;
 datUF *datUF_sensor;
+Amoniy *Amoniy_sensor;
+Calciy *Calciy_sensor;
+
+
 
 
 
@@ -263,4 +270,18 @@ void init_sensors(BLEService service)
     datUF_sensor->CommandCharacteristic->setEventHandler(BLEWritten, datUF_sensor_command_callback);
     service.addCharacteristic(*(datUF_sensor->CommandCharacteristic));
     service.addCharacteristic(*(datUF_sensor->NotifyCharacteristic));
+
+    Amoniy_sensor = new Amoniy();
+    auto Amoniy_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Amoniy_sensor->CommandHandler(device, characteristic); };
+    Amoniy_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Amoniy_sensor_command_callback);
+    service.addCharacteristic(*(Amoniy_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Amoniy_sensor->NotifyCharacteristic));
+
+    Calciy_sensor = new Calciy();
+    auto Calciy_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Calciy_sensor->CommandHandler(device, characteristic); };
+    Calciy_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Calciy_sensor_command_callback);
+    service.addCharacteristic(*(Calciy_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Calciy_sensor->NotifyCharacteristic));
 }
