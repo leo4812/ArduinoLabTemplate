@@ -11,7 +11,7 @@ class RadSens : public BaseSensor
 public:
     RadSens()
     {        
-        this->Name = (char*) "RadSens";
+        this->Name = (char *)std::string("RadSens").c_str();
         CommandCharacteristic = new BLECharacteristic("d390c7e8-8450-4c1c-9e04-c8ab5a1993cc", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
         NotifyCharacteristic = new BLECharacteristic("27025955-40d4-49a7-b3ca-f0771f2a3627", BLERead | BLENotify, 5, true);        
     }

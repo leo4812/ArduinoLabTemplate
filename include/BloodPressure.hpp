@@ -1,16 +1,16 @@
 #include <Arduino.h>
 #include "BaseSensor.hpp"
 
-class MagnetPole : public BaseSensor
+class BloodPressure : public BaseSensor
 {
 
 public:
-    MagnetPole()
+    BloodPressure()
     {
-        this->Name = (char *)std::string("MagnetPole").c_str();
+        this->Name = (char *)std::string("BloodPressure").c_str();
         this->IsAnalog = true;
-        CommandCharacteristic = new BLECharacteristic("3B75281E-00A0-4424-84C5-4C549CC1AE82", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("EF8A1B0B-1005-4DAD-B49D-75F84488E52C", BLERead | BLENotify, 4, true);
+        CommandCharacteristic = new BLECharacteristic("bbc7c68e-44f0-4c31-8dce-e4d3275b59f0", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("ed6c1eb6-fa91-445a-880d-fcd0f6e3e8ed", BLERead | BLENotify, 4, true);
     }
 
 private:

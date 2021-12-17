@@ -1,16 +1,16 @@
 #include <Arduino.h>
 #include "BaseSensor.hpp"
 
-class MagnetPole : public BaseSensor
+class PNO3 : public BaseSensor
 {
 
 public:
-    MagnetPole()
+    PNO3()
     {
-        this->Name = (char *)std::string("MagnetPole").c_str();
+        this->Name = (char *)std::string("PNO3").c_str();
         this->IsAnalog = true;
-        CommandCharacteristic = new BLECharacteristic("3B75281E-00A0-4424-84C5-4C549CC1AE82", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("EF8A1B0B-1005-4DAD-B49D-75F84488E52C", BLERead | BLENotify, 4, true);
+        CommandCharacteristic = new BLECharacteristic("CF47685F-09C6-40C9-A442-A48513E7690A", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("E5E6F644-B15F-4713-9D9E-9CEB6B9D328F", BLERead | BLENotify, 4, true);
     }
 
 private:

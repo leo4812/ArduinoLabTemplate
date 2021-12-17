@@ -16,9 +16,9 @@ public:
     MAX30102()
     {
 
-        this->Name = (char *)"MAX30102";
-        CommandCharacteristic = new BLECharacteristic("9abe01bf-55d3-4ae2-bc09-edb1a6c209c7", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("ccf0279b-f3c5-4366-8b65-5dfd2d6741f8", BLERead | BLENotify, 5, true);
+        this->Name = (char *)std::string("MAX30102").c_str();
+        CommandCharacteristic = new BLECharacteristic("B980FFC1-D3A0-467F-89E2-EF26122D9B7C", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("BFEF9C45-1DFA-4EE1-991C-2CFF1B15FB26", BLERead | BLENotify, 5, true);
     }
 
 private:

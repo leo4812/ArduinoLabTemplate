@@ -12,7 +12,7 @@ class DS18B20 : public BaseSensor
 public:
     DS18B20()
     {
-        this->Name = (char *)"DS18B20";
+        this->Name = (char *)std::string("DS18B20").c_str();
         CommandCharacteristic = new BLECharacteristic("09EB425D-8627-4FCB-AEA8-638BCF3F73F7", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
         NotifyCharacteristic = new BLECharacteristic("8103F9B3-C91E-47CD-8634-4B7D8F4D018D", BLERead | BLENotify, 5, true);
     }

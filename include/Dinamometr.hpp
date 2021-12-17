@@ -7,10 +7,10 @@ class Dinamometr : public BaseSensor
 public:
     Dinamometr()
     {
-        this->Name =  (char*) "Dinamometr";
+        this->Name = (char *)std::string("Dinamometr").c_str();
         this->IsAnalog = true;
-        CommandCharacteristic = new BLECharacteristic("00ca339b-0bd0-4cda-b230-4a9857ecfeca", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("c4d4418f-1692-4a14-ba52-552ee14b142f", BLERead | BLENotify, 6, true);
+        CommandCharacteristic = new BLECharacteristic("7dd71eaa-e6a6-4ecc-9296-39b144ca02af", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("63d223de-f93c-4d5c-8ecb-743e7ab0e676", BLERead | BLENotify, 4, true);
     }
 
 private:
@@ -22,7 +22,7 @@ private:
     void loop()
     {
         uint16_t value = analogRead(this->AnalogPort);
-        uint8_t buffer[6] = { 0, };
+        uint8_t buffer[4] = { 0, };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
         memcpy(&buffer[2], &value, sizeof(value));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));

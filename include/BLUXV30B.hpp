@@ -17,7 +17,7 @@ class BLUXV30B : public BaseSensor
 public:
     BLUXV30B()
     {
-        this->Name = (char *)"BLUXV30B";
+        this->Name = (char *)std::string("BLUXV30B").c_str();
         CommandCharacteristic = new BLECharacteristic("B97A0D31-5278-408E-9CBB-D236E8A1A5C3", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
         NotifyCharacteristic = new BLECharacteristic("BF7C133C-7438-4AEF-A577-3D1BF65B2D1D", BLERead | BLENotify, 5, true);
     }
