@@ -30,6 +30,12 @@
 #include "datUF.hpp"
 #include "Amoniy.hpp"
 #include "Calciy.hpp"
+#include "HeartRate.hpp"
+#include "Spirometr.hpp"
+#include "GSR.hpp"
+
+
+
 
 
 
@@ -64,6 +70,12 @@ Electrocardiogram *Electrocardiogram_sensor;
 datUF *datUF_sensor;
 Amoniy *Amoniy_sensor;
 Calciy *Calciy_sensor;
+HeartRate *HeartRate_sensor;
+Spirometr *Spirometr_sensor;
+GSR *GSR_sensor;
+
+
+
 
 
 
@@ -284,4 +296,25 @@ void init_sensors(BLEService service)
     Calciy_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Calciy_sensor_command_callback);
     service.addCharacteristic(*(Calciy_sensor->CommandCharacteristic));
     service.addCharacteristic(*(Calciy_sensor->NotifyCharacteristic));
+
+    HeartRate_sensor = new HeartRate();
+    auto HeartRate_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { HeartRate_sensor->CommandHandler(device, characteristic); };
+    HeartRate_sensor->CommandCharacteristic->setEventHandler(BLEWritten, HeartRate_sensor_command_callback);
+    service.addCharacteristic(*(HeartRate_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(HeartRate_sensor->NotifyCharacteristic));
+
+    Spirometr_sensor = new Spirometr();
+    auto Spirometr_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Spirometr_sensor->CommandHandler(device, characteristic); };
+    Spirometr_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Spirometr_sensor_command_callback);
+    service.addCharacteristic(*(Spirometr_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Spirometr_sensor->NotifyCharacteristic));
+
+    GSR_sensor = new GSR();
+    auto GSR_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { GSR_sensor->CommandHandler(device, characteristic); };
+    GSR_sensor->CommandCharacteristic->setEventHandler(BLEWritten, GSR_sensor_command_callback);
+    service.addCharacteristic(*(GSR_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(GSR_sensor->NotifyCharacteristic));
 }
