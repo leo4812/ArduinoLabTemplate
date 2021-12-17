@@ -27,6 +27,7 @@
 #include "BloodPressure.hpp"
 #include "Pcl.hpp"
 #include "Electrocardiogram.hpp"
+#include "datUF.hpp"
 
 
 
@@ -57,6 +58,8 @@ Sound *Sound_sensor;
 BloodPressure *BloodPressure_sensor;
 Pcl *Pcl_sensor;
 Electrocardiogram *Electrocardiogram_sensor;
+datUF *datUF_sensor;
+
 
 
 
@@ -253,4 +256,11 @@ void init_sensors(BLEService service)
     Electrocardiogram_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Electrocardiogram_sensor_command_callback);
     service.addCharacteristic(*(Electrocardiogram_sensor->CommandCharacteristic));
     service.addCharacteristic(*(Electrocardiogram_sensor->NotifyCharacteristic));
+
+    datUF_sensor = new datUF();
+    auto datUF_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { datUF_sensor->CommandHandler(device, characteristic); };
+    datUF_sensor->CommandCharacteristic->setEventHandler(BLEWritten, datUF_sensor_command_callback);
+    service.addCharacteristic(*(datUF_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(datUF_sensor->NotifyCharacteristic));
 }
