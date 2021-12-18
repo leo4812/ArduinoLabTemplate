@@ -9,8 +9,8 @@ public:
     {
         this->Name = (char *)std::string("M7Q").c_str();
         this->IsAnalog = true;
-        CommandCharacteristic = new BLECharacteristic("cd1f0556-69d6-423a-8bd5-085558693719", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("464a279b-0347-48cb-b419-892bb4a95de1", BLERead | BLENotify, 4, true);
+        CommandCharacteristic = new BLECharacteristic("C0E294C1-029A-4421-AA13-DE0C7E16A21B", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("A93C4467-02F7-45AE-87E6-3BA799560BD5", BLERead | BLENotify, 6, true);
     }
 
 private:
@@ -21,8 +21,8 @@ private:
     void post_loop() {}
     void loop()
     {
-        uint16_t CO = analogRead(this->AnalogPort);
-        uint8_t buffer[4] = { 0, };
+        uint32_t CO = analogRead(this->AnalogPort);
+        uint8_t buffer[6] = { 0, };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
         memcpy(&buffer[2], &CO, sizeof(CO));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
