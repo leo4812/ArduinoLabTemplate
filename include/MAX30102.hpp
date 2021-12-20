@@ -17,8 +17,8 @@ public:
     {
 
         this->Name = (char *)std::string("MAX30102").c_str();
-        CommandCharacteristic = new BLECharacteristic("B980FFC1-D3A0-467F-89E2-EF26122D9B7C", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("BFEF9C45-1DFA-4EE1-991C-2CFF1B15FB26", BLERead | BLENotify, 5, true);
+        CommandCharacteristic = new BLECharacteristic("9abe01bf-55d3-4ae2-bc09-edb1a6c209c7", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("ccf0279b-f3c5-4366-8b65-5dfd2d6741f8", BLERead | BLENotify, 5, true);
     }
 
 private:
@@ -42,17 +42,20 @@ private:
         else
         {
             ErrorMAX30102 = false;
-        }
 
-        PARTICLE_SENSOR.setup();                    //  Устанавливаем настройки для сенсора по умолчанию
-        PARTICLE_SENSOR.setPulseAmplitudeRed(0x0A); //  Выключаем КРАСНЫЙ светодиод для того, чтобы модуль начал работу
-        PARTICLE_SENSOR.setPulseAmplitudeGreen(0);  //  Выключаем ЗЕЛЁНЫЙ светодиод
+            PARTICLE_SENSOR.setup();                    //  Устанавливаем настройки для сенсора по умолчанию
+            PARTICLE_SENSOR.setPulseAmplitudeRed(0x0A); //  Выключаем КРАСНЫЙ светодиод для того, чтобы модуль начал работу
+            PARTICLE_SENSOR.setPulseAmplitudeGreen(0);  //  Выключаем ЗЕЛЁНЫЙ светодиод
+        }
     }
     void post_loop() {}
     void loop()
     {
 
-        long irValue = PARTICLE_SENSOR.getIR(); //  Считываем значение отражённого ИК-светодиода (отвечающего за пульс) и
+        long irValue = PARTICLE_SENSOR.getIR();  //  Считываем значение отражённого ИК-светодиода (отвечающего за пульс) и
+
+        Serial.println(PARTICLE_SENSOR.getIR());
+        
         if (checkForBeat(irValue) == true)
         {                                           //  если пульс был зафиксирован, то
             long delta = millis() - lastBeat;       //  находим дельту по времени между ударами
