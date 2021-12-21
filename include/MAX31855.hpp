@@ -1,4 +1,4 @@
-
+/*
 #include <Arduino.h>
 #include "BaseSensor.hpp"
 #include <SPI.h>
@@ -36,3 +36,4 @@ private:
     }
 };
 
+*/
