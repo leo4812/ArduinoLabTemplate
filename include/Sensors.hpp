@@ -4,7 +4,7 @@
 #include "MagnetPole.hpp"
 #include "SEN0304.hpp"
 #include "MLX90614.hpp"
-#include "MAX30102.hpp"
+//#include "MAX30102.hpp"
 #include "RadSens.hpp"
 #include "MPX5700DP.hpp"
 #include "MPX5050GP.hpp"
@@ -33,6 +33,8 @@
 #include "HeartRate.hpp"
 #include "Spirometr.hpp"
 #include "GSR.hpp"
+#include "TCS34725TCS.hpp"
+
 
 
 
@@ -44,7 +46,7 @@ LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
 SEN0304 *SEN0304_sensor;
 MLX90614 *MLX90614_sensor;
-MAX30102 *MAX30102_sensor;
+//  MAX30102 *MAX30102_sensor;
 RadSens *RadSens_sensor;
 MPX5700DP *MPX5700DP_sensor;
 MPX5050GP *MPX5050GP_sensor;
@@ -73,6 +75,8 @@ Calciy *Calciy_sensor;
 HeartRate *HeartRate_sensor;
 Spirometr *Spirometr_sensor;
 GSR *GSR_sensor;
+TCS34725TCS *TCS34725TCS_sensor;
+
 
 
 
@@ -113,12 +117,14 @@ void init_sensors(BLEService service)
     service.addCharacteristic(*(MLX90614_sensor->CommandCharacteristic));
     service.addCharacteristic(*(MLX90614_sensor->NotifyCharacteristic));
 
+/*
     MAX30102_sensor = new MAX30102();
     auto MAX30102_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
     { MAX30102_sensor->CommandHandler(device, characteristic); };
     MAX30102_sensor->CommandCharacteristic->setEventHandler(BLEWritten, MAX30102_sensor_command_callback);
     service.addCharacteristic(*(MAX30102_sensor->CommandCharacteristic));
     service.addCharacteristic(*(MAX30102_sensor->NotifyCharacteristic));
+*/
 
     RadSens_sensor = new RadSens();
     auto RadSens_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
@@ -317,4 +323,11 @@ void init_sensors(BLEService service)
     GSR_sensor->CommandCharacteristic->setEventHandler(BLEWritten, GSR_sensor_command_callback);
     service.addCharacteristic(*(GSR_sensor->CommandCharacteristic));
     service.addCharacteristic(*(GSR_sensor->NotifyCharacteristic));
+
+    TCS34725TCS_sensor = new TCS34725TCS();
+    auto TCS34725TCS_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { TCS34725TCS_sensor->CommandHandler(device, characteristic); };
+    TCS34725TCS_sensor->CommandCharacteristic->setEventHandler(BLEWritten, TCS34725TCS_sensor_command_callback);
+    service.addCharacteristic(*(TCS34725TCS_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(TCS34725TCS_sensor->NotifyCharacteristic));
 }

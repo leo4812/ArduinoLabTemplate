@@ -1,3 +1,5 @@
+/*
+
 #include <Arduino.h>
 #include "BaseSensor.hpp"
 
@@ -5,7 +7,6 @@
 #include "Wire.h"      //  Подключаем библиотеку для работы с шиной I2C
 #include "MAX30105.h"  //  Подключаем библиотеку для работы с модулем
 #include "heartRate.h" //  Подключаем блок для работы с ЧСС (пульс)
-
 
 using namespace rtos;
 
@@ -124,3 +125,5 @@ private:
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
+
+*/
