@@ -1,13 +1,15 @@
 #include <Arduino.h>
 #include "BaseSensor.hpp"
 
+
 #include "Wire.h"      //  Подключаем библиотеку для работы с шиной I2C
 #include "MAX30105.h"  //  Подключаем библиотеку для работы с модулем
 #include "heartRate.h" //  Подключаем блок для работы с ЧСС (пульс)
 
-// const byte RATE_SIZE = 10; //  Коэффициент усреднения. ЧЕм больше число, тем больше усреднение показаний.
 
-// bool ErrorMAX30102 = false; //Датчик не подключен
+using namespace rtos;
+
+Thread BPMcalculateBPM;
 
 class MAX30102 : public BaseSensor
 {
@@ -31,6 +33,38 @@ private:
     long lastBeat = 0;    //  Время последнего зафиксированного удара
     float beatsPerMinute; //  Создаём переменную для хранения значения ЧСС
     int beatAvg;          //  Создаём переменную для хранения усреднённого значения ЧСС
+    long irValue = 0;
+
+
+    //Thread BPMcalculateBPM;
+
+    void BPMcalculate()
+    {
+        while (true)
+        {
+            irValue = PARTICLE_SENSOR.getIR(); //  Считываем значение отражённого ИК-светодиода (отвечающего за пульс) и
+
+            // Serial.println(checkForBeat(irValue));
+
+            if (checkForBeat(irValue) == true)
+            {                                           //  если пульс был зафиксирован, то
+                long delta = millis() - lastBeat;       //  находим дельту по времени между ударами
+                lastBeat = millis();                    //  Обновляем счётчик
+                beatsPerMinute = 60 / (delta / 1000.0); //  Вычисляем количество ударов в минуту
+                if (beatsPerMinute < 255 && beatsPerMinute > 20)
+                {                                             //  Если количество ударов в минуту находится в промежутке между 20 и 255, то
+                    rates[rateSpot++] = (byte)beatsPerMinute; //  записываем это значение в массив значений ЧСС
+                    rateSpot %= 10;                           //  Задаём порядковый номер значения в массиве, возвращая остаток от деления и присваивая его переменной rateSpot
+                    beatAvg = 0;                              //  Обнуляем переменную и
+                    for (byte x = 0; x < 10; x++)
+                    {                        //  в цикле выполняем усреднение значений (чем больше RATE_SIZE, тем сильнее усреднение)
+                        beatAvg += rates[x]; //  путём сложения всех элементов массива
+                    }
+                    beatAvg /= 10; //  а затем деления всей суммы на коэффициент усреднения (на общее количество элементов в массиве)
+                }
+            }
+        }
+    }
 
     void pre_loop()
     {
@@ -47,32 +81,12 @@ private:
             PARTICLE_SENSOR.setPulseAmplitudeRed(0x0A); //  Выключаем КРАСНЫЙ светодиод для того, чтобы модуль начал работу
             PARTICLE_SENSOR.setPulseAmplitudeGreen(0);  //  Выключаем ЗЕЛЁНЫЙ светодиод
         }
+
+        BPMcalculateBPM.start(mbed::callback(BPMcalculate));
     }
     void post_loop() {}
     void loop()
     {
-
-        long irValue = PARTICLE_SENSOR.getIR();  //  Считываем значение отражённого ИК-светодиода (отвечающего за пульс) и
-
-        Serial.println(PARTICLE_SENSOR.getIR());
-        
-        if (checkForBeat(irValue) == true)
-        {                                           //  если пульс был зафиксирован, то
-            long delta = millis() - lastBeat;       //  находим дельту по времени между ударами
-            lastBeat = millis();                    //  Обновляем счётчик
-            beatsPerMinute = 60 / (delta / 1000.0); //  Вычисляем количество ударов в минуту
-            if (beatsPerMinute < 255 && beatsPerMinute > 20)
-            {                                             //  Если количество ударов в минуту находится в промежутке между 20 и 255, то
-                rates[rateSpot++] = (byte)beatsPerMinute; //  записываем это значение в массив значений ЧСС
-                rateSpot %= 10;                           //  Задаём порядковый номер значения в массиве, возвращая остаток от деления и присваивая его переменной rateSpot
-                beatAvg = 0;                              //  Обнуляем переменную и
-                for (byte x = 0; x < 10; x++)
-                {                        //  в цикле выполняем усреднение значений (чем больше RATE_SIZE, тем сильнее усреднение)
-                    beatAvg += rates[x]; //  путём сложения всех элементов массива
-                }
-                beatAvg /= 10; //  а затем деления всей суммы на коэффициент усреднения (на общее количество элементов в массиве)
-            }
-        }
 
         float BPM;
 
