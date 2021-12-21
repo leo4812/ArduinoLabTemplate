@@ -34,6 +34,14 @@
 #include "Spirometr.hpp"
 #include "GSR.hpp"
 #include "TCS34725TCS.hpp"
+#include "Giro.hpp"
+#include "Kompas.hpp"
+#include "Uskor.hpp"
+#include "Magnito.hpp"
+
+
+
+
 
 LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
@@ -69,6 +77,15 @@ HeartRate *HeartRate_sensor;
 Spirometr *Spirometr_sensor;
 GSR *GSR_sensor;
 TCS34725TCS *TCS34725TCS_sensor;
+Giro *Giro_sensor;
+Kompas *Kompas_sensor;
+Uskor *Uskor_sensor;
+Magnito *Magnito_sensor;
+
+
+
+
+
 
 void init_sensors(BLEService service)
 {
@@ -313,4 +330,32 @@ void init_sensors(BLEService service)
     TCS34725TCS_sensor->CommandCharacteristic->setEventHandler(BLEWritten, TCS34725TCS_sensor_command_callback);
     service.addCharacteristic(*(TCS34725TCS_sensor->CommandCharacteristic));
     service.addCharacteristic(*(TCS34725TCS_sensor->NotifyCharacteristic));
+
+    Giro_sensor = new Giro();
+    auto Giro_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Giro_sensor->CommandHandler(device, characteristic); };
+    Giro_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Giro_sensor_command_callback);
+    service.addCharacteristic(*(Giro_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Giro_sensor->NotifyCharacteristic));
+
+    Kompas_sensor = new Kompas();
+    auto Kompas_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Kompas_sensor->CommandHandler(device, characteristic); };
+    Kompas_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Kompas_sensor_command_callback);
+    service.addCharacteristic(*(Kompas_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Kompas_sensor->NotifyCharacteristic));
+
+    Uskor_sensor = new Uskor();
+    auto Uskor_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Uskor_sensor->CommandHandler(device, characteristic); };
+    Uskor_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Uskor_sensor_command_callback);
+    service.addCharacteristic(*(Uskor_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Uskor_sensor->NotifyCharacteristic));
+
+    Magnito_sensor = new Magnito();
+    auto Magnito_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Magnito_sensor->CommandHandler(device, characteristic); };
+    Magnito_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Magnito_sensor_command_callback);
+    service.addCharacteristic(*(Magnito_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Magnito_sensor->NotifyCharacteristic));
 }
