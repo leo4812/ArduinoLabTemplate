@@ -1,8 +1,5 @@
-/*
-
 #include <Arduino.h>
 #include "BaseSensor.hpp"
-
 
 #include "Wire.h"      //  Подключаем библиотеку для работы с шиной I2C
 #include "MAX30105.h"  //  Подключаем библиотеку для работы с модулем
@@ -27,7 +24,8 @@ public:
 private:
     bool ErrorMAX30102 = false; //Датчик не подключен
 
-    MAX30105 PARTICLE_SENSOR; //  Создаём объект для работы с библиотекой
+    MAX30105 *max30105; //  Создаём объект для работы с библиотекой
+    Thread *runThread;
 
     byte rates[10];       //  Массив со значениями ЧСС
     byte rateSpot = 0;    //  Переменная с порядковым номером значения в массиве
@@ -36,14 +34,14 @@ private:
     int beatAvg;          //  Создаём переменную для хранения усреднённого значения ЧСС
     long irValue = 0;
 
+    bool doWork = true;
+    
 
-    //Thread BPMcalculateBPM;
-
-    void BPMcalculate()
+    void execute()
     {
-        while (true)
+        while (doWork)
         {
-            irValue = PARTICLE_SENSOR.getIR(); //  Считываем значение отражённого ИК-светодиода (отвечающего за пульс) и
+            irValue = max30105->getIR(); //  Считываем значение отражённого ИК-светодиода (отвечающего за пульс) и
 
             // Serial.println(checkForBeat(irValue));
 
@@ -69,8 +67,9 @@ private:
 
     void pre_loop()
     {
+        max30105 = new MAX30105();
 
-        if (!PARTICLE_SENSOR.begin())
+        if (!max30105 -> begin())
         {                         //  Инициируем работу с модулем. Если инициализация не прошла, то
             ErrorMAX30102 = true; //  выводим сообщение об этом в монитор последовательного порта
         }
@@ -78,14 +77,19 @@ private:
         {
             ErrorMAX30102 = false;
 
-            PARTICLE_SENSOR.setup();                    //  Устанавливаем настройки для сенсора по умолчанию
-            PARTICLE_SENSOR.setPulseAmplitudeRed(0x0A); //  Выключаем КРАСНЫЙ светодиод для того, чтобы модуль начал работу
-            PARTICLE_SENSOR.setPulseAmplitudeGreen(0);  //  Выключаем ЗЕЛЁНЫЙ светодиод
-        }
+            max30105->setup();                    //  Устанавливаем настройки для сенсора по умолчанию
+            max30105->setPulseAmplitudeRed(0x0A); //  Выключаем КРАСНЫЙ светодиод для того, чтобы модуль начал работу
+            max30105->setPulseAmplitudeGreen(0);  //  Выключаем ЗЕЛЁНЫЙ светодиод
 
-        BPMcalculateBPM.start(mbed::callback(BPMcalculate));
+            runThread = new Thread();
+            runThread->start(callback(this, &MAX30102::execute));
+        }
     }
-    void post_loop() {}
+    void post_loop() {
+        doWork = false;
+        runThread->join();
+        delete runThread;
+    }
     void loop()
     {
 
@@ -125,5 +129,3 @@ private:
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
-
-*/
