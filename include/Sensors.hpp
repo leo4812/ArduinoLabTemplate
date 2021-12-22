@@ -38,6 +38,8 @@
 #include "Kompas.hpp"
 #include "Uskor.hpp"
 #include "Magnito.hpp"
+#include "O2.hpp"
+
 
 LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
@@ -77,6 +79,7 @@ Giro *Giro_sensor;
 Kompas *Kompas_sensor;
 Uskor *Uskor_sensor;
 Magnito *Magnito_sensor;
+O2 *O2_sensor;
 
 void init_sensors(BLEService service)
 {
@@ -345,4 +348,11 @@ void init_sensors(BLEService service)
     Magnito_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Magnito_sensor_command_callback);
     service.addCharacteristic(*(Magnito_sensor->CommandCharacteristic));
     service.addCharacteristic(*(Magnito_sensor->NotifyCharacteristic));
+
+    O2_sensor = new O2();
+    auto O2_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { O2_sensor->CommandHandler(device, characteristic); };
+    O2_sensor->CommandCharacteristic->setEventHandler(BLEWritten, O2_sensor_command_callback);
+    service.addCharacteristic(*(O2_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(O2_sensor->NotifyCharacteristic));
 }
