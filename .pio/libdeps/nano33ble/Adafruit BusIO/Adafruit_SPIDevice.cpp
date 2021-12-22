@@ -14,18 +14,18 @@
  *    @param  dataMode The SPI mode to use, defaults to SPI_MODE0
  *    @param  theSPI The SPI bus to use, defaults to &theSPI
  */
-//Adafruit_SPIDevice::Adafruit_SPIDevice(int8_t cspin, uint32_t freq,                 //**********************************
- //                                      BusIOBitOrder dataOrder,
- //                                      uint8_t dataMode, SPIClass *theSPI) {
- // _cs = cspin;
- // _sck = _mosi = _miso = -1;
- // _spi = theSPI;                                                                  // Закоментил
- // _begun = false;
- //_spiSetting = new SPISettings(freq, dataOrder, dataMode);
-  //_freq = freq;
-  //_dataOrder = dataOrder;
-  //_dataMode = dataMode;
-//}                                                                                 //*************************************
+Adafruit_SPIDevice::Adafruit_SPIDevice(int8_t cspin, uint32_t freq, 
+                                       BusIOBitOrder dataOrder,
+                                       uint8_t dataMode, SPIClass *theSPI) {
+  _cs = cspin;
+  _sck = _mosi = _miso = -1;
+  _spi = theSPI;  
+  _begun = false;
+ _spiSetting = new SPISettings(freq, dataOrder, dataMode);
+  _freq = freq;
+  _dataOrder = dataOrder;
+  _dataMode = dataMode;
+} 
 
 /*!
  *    @brief  Create an SPI device with the given CS pin and settins

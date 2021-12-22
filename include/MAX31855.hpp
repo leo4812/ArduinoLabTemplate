@@ -1,9 +1,10 @@
-/*
 #include <Arduino.h>
 #include "BaseSensor.hpp"
 #include <SPI.h>
 #include <Wire.h>
 #include "Adafruit_MAX31855.h"
+
+#define MAXCS 10
 
 class MAX31855 : public BaseSensor
 {
@@ -16,18 +17,18 @@ public:
         NotifyCharacteristic = new BLECharacteristic("F449E6B7-FE1E-45FF-AEBB-DCFC914DEB42", BLERead | BLENotify, 5, true);
     }
 
-private:
-    const uint8_t MAXCS = 10;
-    Adafruit_MAX31855 thermocouple(MAXCS);
+private:    
+    Adafruit_MAX31855* thermocouple = nullptr;
 
     void pre_loop()
     {
-        thermocouple.begin();
+        thermocouple = new Adafruit_MAX31855(MAXCS);
+        thermocouple->begin();
     }
     void post_loop() {}
     void loop()
     {
-        float c = thermocouple.readCelsius();
+        float c = thermocouple->readCelsius();
         uint8_t buffer[5] = {
             0,
         };
@@ -35,5 +36,3 @@ private:
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
-
-*/

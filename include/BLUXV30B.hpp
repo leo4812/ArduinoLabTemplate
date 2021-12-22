@@ -1,15 +1,11 @@
-/*
-
 #include <Arduino.h>
 #include "BaseSensor.hpp"
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_BusIO_Register.h>
 
+//uint8_t blux_i2c_addr = (uint8_t) 0x4A;
 
-uint8_t blux_i2c_addr = (uint8_t) 0x4A;
-
-Adafruit_I2CDevice blux_i2c_obj = Adafruit_I2CDevice(blux_i2c_addr);
-
+//Adafruit_I2CDevice blux_i2c_obj = Adafruit_I2CDevice(blux_i2c_addr);
 
 class BLUXV30B : public BaseSensor
 {
@@ -23,16 +19,20 @@ public:
     }
 
 private:
+    Adafruit_I2CDevice *blux_i2c_obj = nullptr;
+    Adafruit_BusIO_Register *data_reg = nullptr;
     void pre_loop()
     {
-        blux_i2c_obj.begin();
+        blux_i2c_obj = new Adafruit_I2CDevice(0x4A);
+        blux_i2c_obj->begin();
         
+        data_reg = new Adafruit_BusIO_Register(blux_i2c_obj, 0x00, 4, LSBFIRST);
     }
     void post_loop() {}
     void loop()
     {
-        Adafruit_BusIO_Register data_reg = Adafruit_BusIO_Register(&blux_i2c_obj, 0x00, 4, LSBFIRST);
-        uint32_t val = data_reg.read();
+        // Adafruit_BusIO_Register data_reg = Adafruit_BusIO_Register(&blux_i2c_obj, 0x00, 4, LSBFIRST);
+        uint32_t val = data_reg->read();
         uint8_t s[5] = {
             0,
         };
@@ -41,4 +41,3 @@ private:
         this->NotifyCharacteristic->writeValue(s, sizeof(s));
     }
 };
-*/
