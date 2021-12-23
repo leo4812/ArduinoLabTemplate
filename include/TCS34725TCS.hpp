@@ -11,8 +11,8 @@ public:
     TCS34725TCS()
     {
         this->Name = (char *)std::string("TCS34725TCS").c_str();
-        CommandCharacteristic = new BLECharacteristic("6a8bf3e8-d096-4014-9962-ad2cd48e5cbd", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("999593c0-8f6c-40c0-a23b-7a3ad793c219", BLERead | BLENotify, 13, true);
+        CommandCharacteristic = new BLECharacteristic("B807621A-19E3-40E0-B4F5-AEDCFE28C7CA", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("48606B19-820D-48D0-91B8-DF6A4F8DCBD4", BLERead | BLENotify, 13, true);
     }
 
 private:
@@ -39,7 +39,7 @@ private:
         // Serial.print(green);
         // Serial.print("  Синий: ");
         // Serial.println(blue);
-
+        s[0] = 254;
         memcpy(&s[1], (uint8_t *)&red, 4);
         memcpy(&s[5], (uint8_t *)&green, 4);
         memcpy(&s[9], (uint8_t *)&blue, 4);
