@@ -95,22 +95,22 @@ private:
 
         float BPM;
 
-        Serial.print("  Отдает датчик: ");
-        Serial.print(beatAvg);
-        Serial.print("  неусредненное значение: ");
-        Serial.println(beatsPerMinute);
+        //Serial.print("  Отдает датчик: ");
+        //Serial.print(beatAvg);
+        //Serial.print("  неусредненное значение: ");
+        //Serial.println(beatsPerMinute);
 
         if (irValue < 50000)
         {
             BPM = 0;
-            Serial.println("Ошибка   irValue < 50000");
+            //Serial.println("Ошибка   irValue < 50000");
         }
         else
         {
             BPM = beatAvg;
-            Serial.print("Условие else");
-            Serial.print("  Переменная: ");
-            Serial.println(BPM);
+            //Serial.print("Условие else");
+            //Serial.print("  Переменная: ");
+            //Serial.println(BPM);
         }
 
         uint8_t buffer[5] = {

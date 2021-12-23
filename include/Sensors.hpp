@@ -40,6 +40,8 @@
 #include "Magnito.hpp"
 #include "O2.hpp"
 #include "YFS201.hpp"
+#include "BMP180.hpp"
+
 
 
 
@@ -83,6 +85,8 @@ Uskor *Uskor_sensor;
 Magnito *Magnito_sensor;
 O2 *O2_sensor;
 YFS201 *YFS201_sensor;
+BMP180 *BMP180_sensor;
+
 
 
 void init_sensors(BLEService service)
@@ -365,4 +369,11 @@ void init_sensors(BLEService service)
     YFS201_sensor->CommandCharacteristic->setEventHandler(BLEWritten, YFS201_sensor_command_callback);
     service.addCharacteristic(*(YFS201_sensor->CommandCharacteristic));
     service.addCharacteristic(*(YFS201_sensor->NotifyCharacteristic));
+
+    BMP180_sensor = new BMP180();
+    auto BMP180_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { BMP180_sensor->CommandHandler(device, characteristic); };
+    BMP180_sensor->CommandCharacteristic->setEventHandler(BLEWritten, BMP180_sensor_command_callback);
+    service.addCharacteristic(*(BMP180_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(BMP180_sensor->NotifyCharacteristic));
 }
