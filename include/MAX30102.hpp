@@ -7,7 +7,7 @@
 
 using namespace rtos;
 
-Thread BPMcalculateBPM;
+//Thread BPMcalculateBPM;
 
 class MAX30102 : public BaseSensor
 {

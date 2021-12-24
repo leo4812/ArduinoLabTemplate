@@ -33,12 +33,12 @@ private:
 
         tcs.getRGB(&red, &green, &blue);
 
-        // Serial.print("Красный: ");
-        // Serial.print(red);
-        // Serial.print("  Зеленый: ");
-        // Serial.print(green);
-        // Serial.print("  Синий: ");
-        // Serial.println(blue);
+         //Serial.print("Красный: ");
+         //Serial.print(red);
+         //Serial.print("  Зеленый: ");
+         //Serial.print(green);
+         //Serial.print("  Синий: ");
+         //Serial.println(blue);
         s[0] = 254;
         memcpy(&s[1], (uint8_t *)&red, 4);
         memcpy(&s[5], (uint8_t *)&green, 4);
