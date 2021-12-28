@@ -41,6 +41,7 @@
 #include "O2.hpp"
 #include "YFS201.hpp"
 #include "BMP180.hpp"
+#include "Vesy.hpp"
 
 
 
@@ -86,6 +87,7 @@ Magnito *Magnito_sensor;
 O2 *O2_sensor;
 YFS201 *YFS201_sensor;
 BMP180 *BMP180_sensor;
+Vesy *Vesy_sensor;
 
 
 
@@ -376,4 +378,11 @@ void init_sensors(BLEService service)
     BMP180_sensor->CommandCharacteristic->setEventHandler(BLEWritten, BMP180_sensor_command_callback);
     service.addCharacteristic(*(BMP180_sensor->CommandCharacteristic));
     service.addCharacteristic(*(BMP180_sensor->NotifyCharacteristic));
+
+    Vesy_sensor = new Vesy();
+    auto Vesy_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Vesy_sensor->CommandHandler(device, characteristic); };
+    Vesy_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Vesy_sensor_command_callback);
+    service.addCharacteristic(*(Vesy_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Vesy_sensor->NotifyCharacteristic));
 }
