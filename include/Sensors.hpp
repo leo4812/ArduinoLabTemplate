@@ -42,6 +42,8 @@
 #include "YFS201.hpp"
 #include "BMP180.hpp"
 #include "Vesy.hpp"
+#include "usiliya.hpp"
+
 
 
 
@@ -88,6 +90,8 @@ O2 *O2_sensor;
 YFS201 *YFS201_sensor;
 BMP180 *BMP180_sensor;
 Vesy *Vesy_sensor;
+usiliya *usiliya_sensor;
+
 
 
 
@@ -385,4 +389,11 @@ void init_sensors(BLEService service)
     Vesy_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Vesy_sensor_command_callback);
     service.addCharacteristic(*(Vesy_sensor->CommandCharacteristic));
     service.addCharacteristic(*(Vesy_sensor->NotifyCharacteristic));
+
+    usiliya_sensor = new usiliya();
+    auto usiliya_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { usiliya_sensor->CommandHandler(device, characteristic); };
+    usiliya_sensor->CommandCharacteristic->setEventHandler(BLEWritten, usiliya_sensor_command_callback);
+    service.addCharacteristic(*(usiliya_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(usiliya_sensor->NotifyCharacteristic));
 }
