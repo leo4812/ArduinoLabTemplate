@@ -47,7 +47,7 @@ private:
     void post_loop() {}
     void loop()
     {
-        float co = MQGetGasPercentage(MQRead(this->AnalogPort) / Ro, GAS_CARBON_MONOXIDE);
+        float co = MQGetGasPercentage(MQRead(this->AnalogPort)/Ro,GAS_CARBON_MONOXIDE);
         uint16_t value = analogRead(this->AnalogPort);
 
         Serial.print("Пощитаное значение: ");
