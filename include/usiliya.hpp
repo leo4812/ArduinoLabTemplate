@@ -43,7 +43,7 @@ private:
         ounces = units * 0.035274;
 
         float usiliya = ounces;
-        
+
         uint8_t buffer[5] = {
             0,
         };
