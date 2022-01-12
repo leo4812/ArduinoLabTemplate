@@ -42,7 +42,17 @@ private:
         units = units / 10; // усредняем показания, разделив сумму значений на 10
         ounces = units * 0.035274;
 
-        float sila = ounces;
+        float sila;
+
+        if (ounces <= 0)
+        {
+            sila = 0;
+        }
+        else
+        {
+            sila = ounces;
+        }
+
 
         uint8_t buffer[5] = {
             0,

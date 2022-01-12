@@ -21,7 +21,7 @@ private:
     HX711 scale; // создаём объект scale
 
     float calibration_factor = 6.75; // вводим калибровочный коэффициент
-    float units;                      // задаём переменную для измерений в граммах
+    float units;                     // задаём переменную для измерений в граммах
     float ounces;
 
     void pre_loop()
@@ -42,7 +42,16 @@ private:
         units = units / 10; // усредняем показания, разделив сумму значений на 10
         ounces = units * 0.035274;
 
-        float usiliya = ounces;
+        float usiliya;
+
+        if (ounces <= 0)
+        {
+            usiliya = 0;
+        }
+        else
+        {
+            usiliya = ounces;
+        }
 
         uint8_t buffer[5] = {
             0,

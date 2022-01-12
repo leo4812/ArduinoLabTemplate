@@ -42,10 +42,21 @@ private:
         units = units / 10; // усредняем показания, разделив сумму значений на 10
         ounces = units * 0.035274;
 
-        float vesy = ounces;
-        uint8_t buffer[5] = {
-            0,
-        };
+        float vesy;
+
+        if (ounces <= 0)
+        {
+            vesy = 0;
+        }
+        else
+        {
+            vesy = ounces;
+        }
+
+            uint8_t
+            buffer[5] = {
+                0,
+            };
         memcpy(&buffer[1], (uint8_t *)&vesy, sizeof(vesy));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
