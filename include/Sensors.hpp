@@ -43,6 +43,7 @@
 #include "BMP180.hpp"
 #include "Vesy.hpp"
 #include "usiliya.hpp"
+#include "Sila.hpp"
 
 
 
@@ -91,6 +92,8 @@ YFS201 *YFS201_sensor;
 BMP180 *BMP180_sensor;
 Vesy *Vesy_sensor;
 usiliya *usiliya_sensor;
+Sila *Sila_sensor;
+
 
 
 
@@ -396,4 +399,11 @@ void init_sensors(BLEService service)
     usiliya_sensor->CommandCharacteristic->setEventHandler(BLEWritten, usiliya_sensor_command_callback);
     service.addCharacteristic(*(usiliya_sensor->CommandCharacteristic));
     service.addCharacteristic(*(usiliya_sensor->NotifyCharacteristic));
+
+    Sila_sensor = new Sila();
+    auto Sila_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Sila_sensor->CommandHandler(device, characteristic); };
+    Sila_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Sila_sensor_command_callback);
+    service.addCharacteristic(*(Sila_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Sila_sensor->NotifyCharacteristic));
 }

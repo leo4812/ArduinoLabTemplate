@@ -3,15 +3,15 @@
 
 #include "HX711.h"
 
-class usiliya : public BaseSensor
+class Sila : public BaseSensor
 {
 
 public:
-    usiliya()
+    Sila()
     {
-        this->Name = (char *)std::string("usiliya").c_str();
-        CommandCharacteristic = new BLECharacteristic("a705f0a3-9138-4e17-a2dc-9fd9149b5175", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("942c4983-997b-4d2b-a5d9-16d439e90870", BLERead | BLENotify, 5, true);
+        this->Name = (char *)std::string("Sila").c_str();
+        CommandCharacteristic = new BLECharacteristic("15fb2cc1-4a1c-441a-80a9-4970f3d793b0", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
+        NotifyCharacteristic = new BLECharacteristic("bd267419-88e9-4786-9d7e-cb5a757119e2", BLERead | BLENotify, 5, true);
     }
 
 private:
@@ -20,7 +20,7 @@ private:
 
     HX711 scale; // создаём объект scale
 
-    float calibration_factor = 6.75; // вводим калибровочный коэффициент
+    float calibration_factor = 0.50; // вводим калибровочный коэффициент
     float units;                      // задаём переменную для измерений в граммах
     float ounces;
 
@@ -42,12 +42,12 @@ private:
         units = units / 10; // усредняем показания, разделив сумму значений на 10
         ounces = units * 0.035274;
 
-        float usiliya = ounces;
+        float sila = ounces;
 
         uint8_t buffer[5] = {
             0,
         };
-        memcpy(&buffer[1], (uint8_t *)&usiliya, sizeof(usiliya));
+        memcpy(&buffer[1], (uint8_t *)&sila, sizeof(sila));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
