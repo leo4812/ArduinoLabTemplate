@@ -44,6 +44,7 @@
 #include "Vesy.hpp"
 #include "usiliya.hpp"
 #include "Sila.hpp"
+#include "Kaply.hpp"
 
 
 
@@ -93,6 +94,8 @@ BMP180 *BMP180_sensor;
 Vesy *Vesy_sensor;
 usiliya *usiliya_sensor;
 Sila *Sila_sensor;
+Kaply *Kaply_sensor;
+
 
 
 
@@ -406,4 +409,11 @@ void init_sensors(BLEService service)
     Sila_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Sila_sensor_command_callback);
     service.addCharacteristic(*(Sila_sensor->CommandCharacteristic));
     service.addCharacteristic(*(Sila_sensor->NotifyCharacteristic));
+
+    Kaply_sensor = new Kaply();
+    auto Kaply_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Kaply_sensor->CommandHandler(device, characteristic); };
+    Kaply_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Kaply_sensor_command_callback);
+    service.addCharacteristic(*(Kaply_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Kaply_sensor->NotifyCharacteristic));
 }
