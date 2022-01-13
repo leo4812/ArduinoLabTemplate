@@ -45,6 +45,8 @@
 #include "usiliya.hpp"
 #include "Sila.hpp"
 #include "Kaply.hpp"
+#include "DS3231DS.hpp"
+
 
 
 
@@ -95,6 +97,8 @@ Vesy *Vesy_sensor;
 usiliya *usiliya_sensor;
 Sila *Sila_sensor;
 Kaply *Kaply_sensor;
+DS3231DS *DS3231DS_sensor;
+
 
 
 
@@ -416,4 +420,11 @@ void init_sensors(BLEService service)
     Kaply_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Kaply_sensor_command_callback);
     service.addCharacteristic(*(Kaply_sensor->CommandCharacteristic));
     service.addCharacteristic(*(Kaply_sensor->NotifyCharacteristic));
+
+    DS3231DS_sensor = new DS3231DS();
+    auto DS3231DS_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { DS3231DS_sensor->CommandHandler(device, characteristic); };
+    DS3231DS_sensor->CommandCharacteristic->setEventHandler(BLEWritten, DS3231DS_sensor_command_callback);
+    service.addCharacteristic(*(DS3231DS_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(DS3231DS_sensor->NotifyCharacteristic));
 }
