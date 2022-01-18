@@ -36,7 +36,7 @@ public:
         this->_interruptNum = interruptNum;
 
         detachInterrupt(interruptNum);
-        mbed::InterruptIn *irq = new mbed::InterruptIn(digitalPinToPinName(interruptNum));
+        mbed::InterruptIn *irq = new mbed::InterruptIn(digitalPinToPinName(interruptNum), PullNone);
         if (mode == CHANGE)
         {
             irq->rise(this->clb);
@@ -50,21 +50,21 @@ public:
         {
             irq->rise(this->clb);
         }
-        if (useAutoPull)
-        {
-            if (mode == FALLING)
-            {
-                pinMode(interruptNum, INPUT_PULLUP);
-            }
-            else if (mode == RISING)
-            {
-                pinMode(interruptNum, INPUT_PULLDOWN);
-            }
-            else
-            {
-                pinMode(interruptNum, INPUT);
-            }
-        }
+         if (useAutoPull)
+         {
+             if (mode == FALLING)
+             {
+                 pinMode(interruptNum, INPUT_PULLUP);
+             }
+             else if (mode == RISING)
+             {
+                 pinMode(interruptNum, INPUT_PULLDOWN);
+             }
+             else
+             {
+                 pinMode(interruptNum, INPUT);
+             }
+         }
         printf("Interrupt enabled on pin %d\n", interruptNum);
     }
 

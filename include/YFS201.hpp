@@ -43,6 +43,7 @@ public:
         memcpy(&buffer[10], (uint8_t *)&litres, 4);
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
 
+
         last = current;
     }
 

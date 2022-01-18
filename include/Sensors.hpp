@@ -46,6 +46,8 @@
 #include "Sila.hpp"
 #include "Kaply.hpp"
 #include "DS3231DS.hpp"
+#include "veterok.hpp"
+
 
 
 
@@ -98,6 +100,8 @@ usiliya *usiliya_sensor;
 Sila *Sila_sensor;
 Kaply *Kaply_sensor;
 DS3231DS *DS3231DS_sensor;
+veterok *veterok_sensor;
+
 
 
 
@@ -427,4 +431,10 @@ void init_sensors(BLEService service)
     DS3231DS_sensor->CommandCharacteristic->setEventHandler(BLEWritten, DS3231DS_sensor_command_callback);
     service.addCharacteristic(*(DS3231DS_sensor->CommandCharacteristic));
     service.addCharacteristic(*(DS3231DS_sensor->NotifyCharacteristic));
+
+    veterok_sensor = new veterok();
+    auto veterok_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { veterok_sensor->CommandHandler(device, characteristic); };
+    veterok_sensor->CommandCharacteristic->setEventHandler(BLEWritten, veterok_sensor_command_callback);
+    service.addCharacteristic(*(veterok_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(veterok_sensor->NotifyCharacteristic));
 }
