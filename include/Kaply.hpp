@@ -1,9 +1,7 @@
-#include <Arduino.h>
 #include "BaseSensor.hpp"
-
-class Kaply : public BaseSensor
+#include "PulseCounter.hpp"
+class Kaply : public BaseSensor, public PulseCounter
 {
-
 public:
     Kaply()
     {
@@ -13,48 +11,37 @@ public:
         NotifyCharacteristic = new BLECharacteristic("3c16c583-bd2d-46be-b4a4-e325d53ee3b3", BLERead | BLENotify, 6, true);
     }
 
-private:
-    uint32_t kaply = 0;
-
-    bool flag = false;
-
     void pre_loop()
     {
-        pinMode(this->AnalogPort, INPUT);
+        this->enableInterrupt(this->AnalogPort, RISING, false);
     }
-    void post_loop() {}
+
+    void post_loop()
+    {
+        this->counter_total = 0;
+
+        this->disableInterrupt();
+    }
+
     void loop()
     {
-        if (digitalRead(this->AnalogPort) == 1)
-        {
 
-            if (((digitalRead(this->AnalogPort)) == 1) && (flag == false))
-            {
-                flag = true;
-                kaply = kaply + 1;
-            }
-        }
+        auto tt = this->counter_total;
 
-        else if (((digitalRead(this->AnalogPort)) == 0) && (flag == true))
-        {
-            flag = false;
-            thread_sleep_for(50);     // Вместо delay
-        }
+        uint32_t count = tt / 2;
 
-        else
-        {
+        Serial.println(count);
 
-            flag = false;
-        }
-
-        //Serial.println(kaply);
-
-        
-        uint8_t buffer[6] = {
+        uint8_t buffer[14] = {
             0,
         };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
-        memcpy(&buffer[2], &kaply, sizeof(kaply));
+        memcpy(&buffer[2], (uint8_t *)&count, 4);
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+
+
     }
+
+private:
+
 };

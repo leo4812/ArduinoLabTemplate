@@ -10,6 +10,8 @@ public:
     }
     volatile uint32_t counter = 0;
 
+    volatile uint32_t counter_total = 0;
+
     uint32_t pulsePeriod(uint32_t elapsedTime)
     {
         uint32_t result = 0;
@@ -74,5 +76,6 @@ private:
     void interruptCallback()
     {        
         counter++;
+        counter_total++;
     }
 };
