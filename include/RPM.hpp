@@ -46,9 +46,9 @@ public:
 
         float avr = Average;
 
-        float rez = (avr / 24) * 60;
+        float rezRPM = (avr / 24) * 60;
 
-        uint32_t rpm = rez;
+        uint32_t rpm = rezRPM;
 
         uint8_t buffer[6] = {
             0,
