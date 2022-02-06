@@ -63,8 +63,8 @@ public:
                 Serial.print("   Количество импульсов: ");
                 Serial.print(pulsesCount);
 
-                Serial.print("   Метры/сек: ");
-                Serial.println(rez);
+                Serial.print("   Обороты в минуту: ");
+                Serial.println(rpm);
         */
         last = current;
     }
