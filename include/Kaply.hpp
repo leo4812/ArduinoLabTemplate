@@ -30,9 +30,9 @@ public:
 
         uint32_t count = tt / 2;
 
-        Serial.println(count);
+        //Serial.println(count);
 
-        uint8_t buffer[14] = {
+        uint8_t buffer[6] = {
             0,
         };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;

@@ -46,7 +46,7 @@ public:
 
         float avr = Average;
 
-        float rezRPM = (avr / 24) * 60;
+        float rezRPM = (avr / 24) * 60.0;
 
         uint32_t rpm = rezRPM;
 
@@ -57,15 +57,15 @@ public:
         memcpy(&buffer[2], (uint8_t *)&rpm, sizeof(rpm));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
 
-        /*
-                Serial.print("Период: ");
-                Serial.print(period);
-                Serial.print("   Количество импульсов: ");
-                Serial.print(pulsesCount);
+        
+                //Serial.print("Период: ");
+                //Serial.print(period);
+                //Serial.print("   Количество импульсов: ");
+                //Serial.print(pulsesCount);
 
-                Serial.print("   Обороты в минуту: ");
-                Serial.println(rpm);
-        */
+                //Serial.print("   Обороты в минуту: ");
+                //Serial.println(rpm);
+        
         last = current;
     }
 
