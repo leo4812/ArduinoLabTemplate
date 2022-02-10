@@ -1,17 +1,12 @@
 #include <Arduino.h>
 #include "BaseSensor.hpp"
-#include "RingAverage.h"
 
 class MPX5700DP : public BaseSensor
 {
 
 public:
-    uint32_t PressureFILTR;
-
     MPX5700DP()
     {
-        fil = new RingAverage<uint32_t, 10>();
-
         this->Name = (char *)std::string("MPX5700DP").c_str();
         this->IsAnalog = true;
         CommandCharacteristic = new BLECharacteristic("6C8B0BBC-8096-4A20-9051-1819B5001EFD", BLERead | BLEWrite, ANALOG_COMMAND_SIZE, true);
@@ -29,33 +24,11 @@ private:
 
         uint32_t value = analogRead(this->AnalogPort);
 
-        auto PressureFILTR = fil->filtered(value);
-
-       // int midArifm()
-       // {
-       //     long sum = 0;
-       //     for (int i = 0; i < 10; i++)
-       //         sum += PressureFILTR;
-       //     return ((float)sum / 10);
-       // }
-
-        uint32_t REZPress = midArifm();
-
         uint8_t buffer[6] = {
             0,
         };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
-        memcpy(&buffer[2], &REZPress, sizeof(REZPress));
+        memcpy(&buffer[2], &value, sizeof(value));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
-
-    int midArifm()
-    {
-        long sum = 0;
-        for (int i = 0; i < 10; i++)
-            sum += PressureFILTR;
-        return ((float)sum / 10);
-    }
-
-    RingAverage<uint32_t, 10> *fil;
 };
