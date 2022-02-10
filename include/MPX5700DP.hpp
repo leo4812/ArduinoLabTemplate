@@ -31,12 +31,31 @@ private:
 
         auto PressureFILTR = fil->filtered(value);
 
+       // int midArifm()
+       // {
+       //     long sum = 0;
+       //     for (int i = 0; i < 10; i++)
+       //         sum += PressureFILTR;
+       //     return ((float)sum / 10);
+       // }
+
+        uint32_t REZPress = midArifm();
+
         uint8_t buffer[6] = {
             0,
         };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
-        memcpy(&buffer[2], &PressureFILTR, sizeof(PressureFILTR));
+        memcpy(&buffer[2], &REZPress, sizeof(REZPress));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
+
+    int midArifm()
+    {
+        long sum = 0;
+        for (int i = 0; i < 10; i++)
+            sum += PressureFILTR;
+        return ((float)sum / 10);
+    }
+
     RingAverage<uint32_t, 10> *fil;
 };
