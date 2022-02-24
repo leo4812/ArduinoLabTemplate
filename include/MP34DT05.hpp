@@ -62,7 +62,10 @@ public:
                 }
                 samplesRead = 0;
             }
+            Serial.print("Поток работает    ");
+            Serial.println(amplitude);
         }
+        Serial.println("Выход из цикла while");
     }
 
     void pre_loop()
