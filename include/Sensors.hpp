@@ -48,6 +48,8 @@
 #include "DS3231DS.hpp"
 #include "veterok.hpp"
 #include "RPM.hpp"
+#include "HTS221.hpp"
+
 
 
 
@@ -104,6 +106,8 @@ Kaply *Kaply_sensor;
 DS3231DS *DS3231DS_sensor;
 veterok *veterok_sensor;
 RPM *RPM_sensor;
+HTS221 *HTS221_sensor;
+
 
 
 
@@ -447,4 +451,11 @@ void init_sensors(BLEService service)
     RPM_sensor->CommandCharacteristic->setEventHandler(BLEWritten, RPM_sensor_command_callback);
     service.addCharacteristic(*(RPM_sensor->CommandCharacteristic));
     service.addCharacteristic(*(RPM_sensor->NotifyCharacteristic));
+
+    HTS221_sensor = new HTS221();
+    auto HTS221_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { HTS221_sensor->CommandHandler(device, characteristic); };
+    HTS221_sensor->CommandCharacteristic->setEventHandler(BLEWritten, HTS221_sensor_command_callback);
+    service.addCharacteristic(*(HTS221_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(HTS221_sensor->NotifyCharacteristic));
 }
