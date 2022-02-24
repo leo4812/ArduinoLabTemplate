@@ -8,6 +8,8 @@ using namespace rtos;
 
 void g_onPDMdata();
 
+void *instance;
+
 class MP34DT05 : public BaseSensor
 {
 public:
@@ -19,7 +21,7 @@ public:
         NotifyCharacteristic = new BLECharacteristic("3cd72a1b-ddb0-4a48-9716-83251663ddbf", BLERead | BLENotify, 5, true);
     }
 
-    static MP34DT05 *instance;
+    // static MP34DT05 *instance;
     double MP34DT05_AOP = 122.5;
     double MP34DT05_SNR = 64;
     double MP34DT05_dBFS = -26;
@@ -97,5 +99,6 @@ public:
 
 void g_onPDMdata()
 {
-    MP34DT05::instance->onPDMdata();
+    MP34DT05* m = static_cast<MP34DT05*>(instance);
+    m->onPDMdata();
 }
