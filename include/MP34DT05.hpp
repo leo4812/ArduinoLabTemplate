@@ -62,11 +62,13 @@ public:
                 }
                 samplesRead = 0;
             }
-            Serial.print(runThread); //                          ТУТ
+          
             Serial.print("   Поток работает    ");  //           ТУТ
             Serial.println(amplitude);  //                       ТУТ
         }
-        Serial.println("Выход из цикла while");  //              ТУТ
+        Serial.print("Выход из цикла while  ");  //              ТУТ
+        Serial.print("  Переменная в цикле ");
+        Serial.println(doWork);
     }
 
     void pre_loop()
@@ -87,8 +89,8 @@ public:
         doWork = false;
         runThread->join();
         delete runThread;
-        Serial.print("Пост луп   ");  //                        ТУТ
-        Serial.println(runThread);  //                          ТУТ
+        Serial.print("Переменная вайла в ПОСТЛУП:  ");  //                        ТУТ
+        Serial.println(doWork);  //                          ТУТ
     }
 
     void loop()
