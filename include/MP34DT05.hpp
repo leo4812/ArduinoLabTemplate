@@ -62,10 +62,11 @@ public:
                 }
                 samplesRead = 0;
             }
-            Serial.print("Поток работает    ");
-            Serial.println(amplitude);
+            Serial.print(runThread); //                          ТУТ
+            Serial.print("   Поток работает    ");  //           ТУТ
+            Serial.println(amplitude);  //                       ТУТ
         }
-        Serial.println("Выход из цикла while");
+        Serial.println("Выход из цикла while");  //              ТУТ
     }
 
     void pre_loop()
@@ -76,6 +77,9 @@ public:
         PDM.begin(channels, frequency);
         runThread = new Thread();
         runThread->start(callback(this, &MP34DT05::execute));
+
+        Serial.print("Переменная вайла в прелупе:   ");  //      ТУТ
+        Serial.println(doWork);  //                              ТУТ
     }
 
     void post_loop()
@@ -83,6 +87,8 @@ public:
         doWork = false;
         runThread->join();
         delete runThread;
+        Serial.print("Пост луп   ");  //                        ТУТ
+        Serial.println(runThread);  //                          ТУТ
     }
 
     void loop()
