@@ -67,8 +67,8 @@ public:
             Serial.println(amplitude);  //                       ТУТ
         }
         Serial.print("Выход из цикла while  ");  //              ТУТ
-        Serial.print("  Переменная в цикле ");
-        Serial.println(doWork);
+        Serial.print("  Переменная в цикле ");  //               ТУТ
+        Serial.println(doWork);  //                              ТУТ
     }
 
     void pre_loop()
