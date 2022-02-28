@@ -62,13 +62,13 @@ public:
                 }
                 samplesRead = 0;
             }
-          
-            Serial.print("   Поток работает    ");  //           ТУТ
-            Serial.println(amplitude);  //                       ТУТ
+
+            Serial.print("   Поток работает    "); //           ТУТ
+            Serial.println(amplitude);             //                       ТУТ
         }
-        Serial.print("Выход из цикла while  ");  //              ТУТ
+        Serial.print("Выход из цикла while  "); //              ТУТ
         Serial.print("  Переменная в цикле ");  //               ТУТ
-        Serial.println(doWork);  //                              ТУТ
+        Serial.println(doWork);                 //                              ТУТ
     }
 
     void pre_loop()
@@ -80,8 +80,10 @@ public:
         runThread = new Thread();
         runThread->start(callback(this, &MP34DT05::execute));
 
-        Serial.print("Переменная вайла в прелупе:   ");  //      ТУТ
-        Serial.println(doWork);  //                              ТУТ
+        doWork = true;
+
+        Serial.print("Переменная вайла в прелупе:   "); //      ТУТ
+        Serial.println(doWork);                         //                              ТУТ
     }
 
     void post_loop()
@@ -89,16 +91,16 @@ public:
         doWork = false;
         runThread->join();
         delete runThread;
-        Serial.print("Переменная вайла в ПОСТЛУП:  ");  //                        ТУТ
-        Serial.println(doWork);  //                          ТУТ
+        Serial.print("Переменная вайла в ПОСТЛУП:  "); //                        ТУТ
+        Serial.println(doWork);                        //                          ТУТ
     }
 
     void loop()
     {
         if (!isinf(amplitude))
         {
-            //printf("$%.2f;\n", amplitude);
-            
+            // printf("$%.2f;\n", amplitude);
+
             uint8_t buffer[5] = {
                 0,
             };
@@ -110,6 +112,6 @@ public:
 
 void g_onPDMdata()
 {
-    MP34DT05* m = static_cast<MP34DT05*>(instance);
+    MP34DT05 *m = static_cast<MP34DT05 *>(instance);
     m->onPDMdata();
 }
