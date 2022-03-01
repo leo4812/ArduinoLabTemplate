@@ -1,8 +1,19 @@
 #include "BaseSensor.hpp"
 #include "PulseCounter.hpp"
-class Kaply : public BaseSensor, public PulseCounter
+
+using namespace rtos;
+
+class Kaply : public BaseSensor
 {
 public:
+    bool flag = false;
+
+    bool doWork = true;
+
+    uint32_t kaply = 0;
+
+    Thread *runThread;
+
     Kaply()
     {
         this->Name = (char *)std::string("Kaply").c_str();
@@ -11,37 +22,64 @@ public:
         NotifyCharacteristic = new BLECharacteristic("3c16c583-bd2d-46be-b4a4-e325d53ee3b3", BLERead | BLENotify, 6, true);
     }
 
+private:
+    void execute()
+    {
+        while (doWork)
+        {
+
+            if (digitalRead(this->AnalogPort) == 1)
+            {
+
+                if (((digitalRead(this->AnalogPort)) == 1) && (flag == false))
+                {
+                    flag = true;
+                    kaply = kaply + 1;
+                }
+            }
+
+            else if (((digitalRead(this->AnalogPort)) == 0) && (flag == true))
+            {
+                flag = false;
+                thread_sleep_for(50); // Вместо delay
+            }
+
+            else
+            {
+
+                flag = false;
+            }
+        }
+    }
+
     void pre_loop()
     {
-        this->enableInterrupt(this->AnalogPort, RISING, false);
+        pinMode(this->AnalogPort, INPUT);
+
+        doWork = true;
+
+        runThread = new Thread();
+        runThread->start(callback(this, &Kaply::execute));
     }
 
     void post_loop()
     {
-        this->counter_total = 0;
-
-        this->disableInterrupt();
+        doWork = false;
+        if (runThread != nullptr)
+        {
+            runThread = nullptr;
+        }
     }
 
     void loop()
     {
-
-        auto tt = this->counter_total;
-
-        uint32_t count = tt / 2;
-
-        //Serial.println(count);
+        // Serial.println(kaply);
 
         uint8_t buffer[6] = {
             0,
         };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
-        memcpy(&buffer[2], (uint8_t *)&count, 4);
+        memcpy(&buffer[2], &kaply, sizeof(kaply));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
-
-
     }
-
-private:
-
 };
