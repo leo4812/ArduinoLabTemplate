@@ -31,7 +31,7 @@ private:
     byte rateSpot = 0;    //  Переменная с порядковым номером значения в массиве
     long lastBeat = 0;    //  Время последнего зафиксированного удара
     float beatsPerMinute; //  Создаём переменную для хранения значения ЧСС
-    int beatAvg;          //  Создаём переменную для хранения усреднённого значения ЧСС
+    int beatAvg = 0;          //  Создаём переменную для хранения усреднённого значения ЧСС
     long irValue = 0;
 
     bool doWork = true;
@@ -60,6 +60,8 @@ private:
                         beatAvg += rates[x]; //  путём сложения всех элементов массива
                     }
                     beatAvg /= 10; //  а затем деления всей суммы на коэффициент усреднения (на общее количество элементов в массиве)
+                   // Serial.print("Внутри дополнительного потока:   ");
+                   // Serial.println(beatAvg);
                 }
             }
         }
@@ -83,6 +85,7 @@ private:
 
             runThread = new Thread();
             runThread->start(callback(this, &MAX30102::execute));
+            doWork = true;
         }
     }
     void post_loop() {
