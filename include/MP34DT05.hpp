@@ -62,9 +62,7 @@ public:
                 }
                 samplesRead = 0;
             }
-
         }
-
     }
 
     void pre_loop()
@@ -77,15 +75,15 @@ public:
         runThread->start(callback(this, &MP34DT05::execute));
 
         doWork = true;
-
     }
 
     void post_loop()
     {
         doWork = false;
-        runThread->join();
-        delete runThread;
-
+        if (runThread != nullptr)
+        {
+            runThread = nullptr;
+        }
     }
 
     void loop()

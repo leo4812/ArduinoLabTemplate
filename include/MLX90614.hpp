@@ -9,8 +9,6 @@ class MLX90614 : public BaseSensor
 {
 
 public:
-    bool ErrorMLX90614 = false; //Датчик не подключен
-
     MLX90614()
     {
         this->Name = (char *)std::string("MLX90614").c_str();
@@ -21,7 +19,7 @@ public:
 private:
     void pre_loop()
     {
-        ErrorMLX90614 = !mlx.begin();
+        mlx.begin();
     }
     void post_loop() {}
     void loop()
@@ -31,16 +29,8 @@ private:
         uint8_t buffer[5] = {
             0,
         };
-        if (ErrorMLX90614 == true)
-        {
-            buffer[0] = 1;
-        }
-        else
-        {
-            buffer[0] = 0;
-            memcpy(&buffer[1], (uint8_t *)&temp, sizeof(temp));
-        }
+        memcpy(&buffer[1], (uint8_t *)&temp, sizeof(temp));
+
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
-        Serial.println(mlx.begin());  //                                     ТУТ
     }
 };

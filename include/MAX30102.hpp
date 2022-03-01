@@ -7,7 +7,7 @@
 
 using namespace rtos;
 
-//Thread BPMcalculateBPM;
+// Thread BPMcalculateBPM;
 
 class MAX30102 : public BaseSensor
 {
@@ -31,11 +31,10 @@ private:
     byte rateSpot = 0;    //  Переменная с порядковым номером значения в массиве
     long lastBeat = 0;    //  Время последнего зафиксированного удара
     float beatsPerMinute; //  Создаём переменную для хранения значения ЧСС
-    int beatAvg = 0;          //  Создаём переменную для хранения усреднённого значения ЧСС
+    int beatAvg = 0;      //  Создаём переменную для хранения усреднённого значения ЧСС
     long irValue = 0;
 
     bool doWork = true;
-    
 
     void execute()
     {
@@ -60,8 +59,8 @@ private:
                         beatAvg += rates[x]; //  путём сложения всех элементов массива
                     }
                     beatAvg /= 10; //  а затем деления всей суммы на коэффициент усреднения (на общее количество элементов в массиве)
-                   // Serial.print("Внутри дополнительного потока:   ");
-                   // Serial.println(beatAvg);
+                                   // Serial.print("Внутри дополнительного потока:   ");
+                                   // Serial.println(beatAvg);
                 }
             }
         }
@@ -71,7 +70,9 @@ private:
     {
         max30105 = new MAX30105();
 
-        if (!max30105 -> begin())
+        doWork = true;
+
+        if (!max30105->begin())
         {                         //  Инициируем работу с модулем. Если инициализация не прошла, то
             ErrorMAX30102 = true; //  выводим сообщение об этом в монитор последовательного порта
         }
@@ -85,35 +86,37 @@ private:
 
             runThread = new Thread();
             runThread->start(callback(this, &MAX30102::execute));
-            doWork = true;
         }
     }
-    void post_loop() {
+    void post_loop()
+    {
         doWork = false;
-        runThread->join();
-        delete runThread;
+        if (runThread != nullptr)
+        {
+            runThread = nullptr;
+        }
     }
     void loop()
     {
 
         float BPM;
 
-        //Serial.print("  Отдает датчик: ");
-        //Serial.print(beatAvg);
-        //Serial.print("  неусредненное значение: ");
-        //Serial.println(beatsPerMinute);
+        // Serial.print("  Отдает датчик: ");
+        // Serial.print(beatAvg);
+        // Serial.print("  неусредненное значение: ");
+        // Serial.println(beatsPerMinute);
 
         if (irValue < 50000)
         {
             BPM = 0;
-            //Serial.println("Ошибка   irValue < 50000");
+            // Serial.println("Ошибка   irValue < 50000");
         }
         else
         {
             BPM = beatAvg;
-            //Serial.print("Условие else");
-            //Serial.print("  Переменная: ");
-            //Serial.println(BPM);
+            // Serial.print("Условие else");
+            // Serial.print("  Переменная: ");
+            // Serial.println(BPM);
         }
 
         uint8_t buffer[5] = {
