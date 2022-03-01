@@ -33,7 +33,7 @@ public:
     short sampleBuffer[512];
     volatile int samplesRead;
 
-    volatile float amplitude;
+    volatile float amplitude = 0;
 
     mbed::Callback<void()> clb;
 
@@ -63,12 +63,8 @@ public:
                 samplesRead = 0;
             }
 
-            Serial.print("   Поток работает    "); //           ТУТ
-            Serial.println(amplitude);             //                       ТУТ
         }
-        Serial.print("Выход из цикла while  "); //              ТУТ
-        Serial.print("  Переменная в цикле ");  //               ТУТ
-        Serial.println(doWork);                 //                              ТУТ
+
     }
 
     void pre_loop()
@@ -82,8 +78,6 @@ public:
 
         doWork = true;
 
-        Serial.print("Переменная вайла в прелупе:   "); //      ТУТ
-        Serial.println(doWork);                         //                              ТУТ
     }
 
     void post_loop()
@@ -91,8 +85,7 @@ public:
         doWork = false;
         runThread->join();
         delete runThread;
-        Serial.print("Переменная вайла в ПОСТЛУП:  "); //                        ТУТ
-        Serial.println(doWork);                        //                          ТУТ
+
     }
 
     void loop()
