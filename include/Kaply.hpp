@@ -1,5 +1,5 @@
+#include <Arduino.h>
 #include "BaseSensor.hpp"
-#include "PulseCounter.hpp"
 
 using namespace rtos;
 
