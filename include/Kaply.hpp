@@ -10,7 +10,7 @@ public:
 
     bool doWork = true;
 
-    uint32_t kaply = 0;
+    volatile uint32_t kaply = 0; // пометить как volatile
 
     Thread *runThread;
 
@@ -34,14 +34,14 @@ private:
                 if (((digitalRead(this->AnalogPort)) == 1) && (flag == false))
                 {
                     flag = true;
-                    kaply = kaply + 1;
+                    kaply++;
                 }
             }
 
             else if (((digitalRead(this->AnalogPort)) == 0) && (flag == true))
             {
                 flag = false;
-                thread_sleep_for(50); // Вместо delay
+                ThisThread::sleep_for(50); // Вместо delay
             }
 
             else
