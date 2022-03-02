@@ -56,6 +56,8 @@ private:
     {
         pinMode(this->AnalogPort, INPUT);
 
+        kaply = 0;
+
         doWork = true;
 
         runThread = new Thread();
@@ -73,13 +75,15 @@ private:
 
     void loop()
     {
-        // Serial.println(kaply);
+        uint32_t kap = kaply;
+
+        // Serial.println(kap);
 
         uint8_t buffer[6] = {
             0,
         };
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
-        memcpy(&buffer[2], &kaply, sizeof(kaply));
+        memcpy(&buffer[2], &kap, sizeof(kap));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
     }
 };
