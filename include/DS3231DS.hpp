@@ -45,18 +45,19 @@ private:
         memcpy(&buffer[11], (uint8_t *)&second, 2);
 
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
-
-        Serial.print("Год: ");
-        Serial.print(year);
-        Serial.print("  Месяц: ");
-        Serial.print(month);
-        Serial.print("  День: ");
-        Serial.print(day);
-        Serial.print("  Часы: ");
-        Serial.print(hour);
-        Serial.print("  Минуты: ");
-        Serial.print(minute);
-        Serial.print("  Секунды: ");
-        Serial.println(second);
+        /*
+                Serial.print("Год: ");
+                Serial.print(year);
+                Serial.print("  Месяц: ");
+                Serial.print(month);
+                Serial.print("  День: ");
+                Serial.print(day);
+                Serial.print("  Часы: ");
+                Serial.print(hour);
+                Serial.print("  Минуты: ");
+                Serial.print(minute);
+                Serial.print("  Секунды: ");
+                Serial.println(second);
+                */
     }
 };
