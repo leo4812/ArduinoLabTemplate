@@ -50,6 +50,8 @@
 #include "RPM.hpp"
 #include "HTS221.hpp"
 #include "MP34DT05.hpp"
+#include "TDS_EC.hpp"
+
 
 
 
@@ -109,6 +111,8 @@ veterok *veterok_sensor;
 RPM *RPM_sensor;
 HTS221 *HTS221_sensor;
 MP34DT05 *MP34DT05_sensor;
+TDS_EC *TDS_EC_sensor;
+
 
 
 
@@ -467,4 +471,11 @@ void init_sensors(BLEService service)
     MP34DT05_sensor->CommandCharacteristic->setEventHandler(BLEWritten, MP34DT05_sensor_command_callback);
     service.addCharacteristic(*(MP34DT05_sensor->CommandCharacteristic));
     service.addCharacteristic(*(MP34DT05_sensor->NotifyCharacteristic));
+
+    TDS_EC_sensor = new TDS_EC();
+    auto TDS_EC_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { TDS_EC_sensor->CommandHandler(device, characteristic); };
+    TDS_EC_sensor->CommandCharacteristic->setEventHandler(BLEWritten, TDS_EC_sensor_command_callback);
+    service.addCharacteristic(*(TDS_EC_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(TDS_EC_sensor->NotifyCharacteristic));
 }
