@@ -28,8 +28,8 @@ private:
 
         tds->set_t(25.0f); //   Указываем текущую температуру жидкости.
 
-        uint32_t EC = tds->getEC();
-        uint32_t TDS = tds->getTDS();
+        uint32_t EC = tds->getEC();  //Микросименс на см
+        uint32_t TDS = tds->getTDS();  //PPM
 
         uint8_t buffer[9] = {
             0,
