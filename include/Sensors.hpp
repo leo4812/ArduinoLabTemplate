@@ -51,12 +51,7 @@
 #include "HTS221.hpp"
 #include "MP34DT05.hpp"
 #include "TDS_EC.hpp"
-
-
-
-
-
-
+#include "INA219.hpp"
 
 
 
@@ -112,13 +107,7 @@ RPM *RPM_sensor;
 HTS221 *HTS221_sensor;
 MP34DT05 *MP34DT05_sensor;
 TDS_EC *TDS_EC_sensor;
-
-
-
-
-
-
-
+INA219 *INA219_sensor;
 
 
 
@@ -399,7 +388,8 @@ void init_sensors(BLEService service)
     service.addCharacteristic(*(O2_sensor->NotifyCharacteristic));
 
     YFS201_sensor = new YFS201();
-    auto YFS201_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { YFS201_sensor->CommandHandler(device, characteristic); };
+    auto YFS201_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { YFS201_sensor->CommandHandler(device, characteristic); };
     YFS201_sensor->CommandCharacteristic->setEventHandler(BLEWritten, YFS201_sensor_command_callback);
     service.addCharacteristic(*(YFS201_sensor->CommandCharacteristic));
     service.addCharacteristic(*(YFS201_sensor->NotifyCharacteristic));
@@ -447,13 +437,15 @@ void init_sensors(BLEService service)
     service.addCharacteristic(*(DS3231DS_sensor->NotifyCharacteristic));
 
     veterok_sensor = new veterok();
-    auto veterok_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { veterok_sensor->CommandHandler(device, characteristic); };
+    auto veterok_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { veterok_sensor->CommandHandler(device, characteristic); };
     veterok_sensor->CommandCharacteristic->setEventHandler(BLEWritten, veterok_sensor_command_callback);
     service.addCharacteristic(*(veterok_sensor->CommandCharacteristic));
     service.addCharacteristic(*(veterok_sensor->NotifyCharacteristic));
 
     RPM_sensor = new RPM();
-    auto RPM_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic) { RPM_sensor->CommandHandler(device, characteristic); };
+    auto RPM_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { RPM_sensor->CommandHandler(device, characteristic); };
     RPM_sensor->CommandCharacteristic->setEventHandler(BLEWritten, RPM_sensor_command_callback);
     service.addCharacteristic(*(RPM_sensor->CommandCharacteristic));
     service.addCharacteristic(*(RPM_sensor->NotifyCharacteristic));
@@ -478,4 +470,11 @@ void init_sensors(BLEService service)
     TDS_EC_sensor->CommandCharacteristic->setEventHandler(BLEWritten, TDS_EC_sensor_command_callback);
     service.addCharacteristic(*(TDS_EC_sensor->CommandCharacteristic));
     service.addCharacteristic(*(TDS_EC_sensor->NotifyCharacteristic));
+
+    INA219_sensor = new INA219();
+    auto INA219_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { INA219_sensor->CommandHandler(device, characteristic); };
+    INA219_sensor->CommandCharacteristic->setEventHandler(BLEWritten, INA219_sensor_command_callback);
+    service.addCharacteristic(*(INA219_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(INA219_sensor->NotifyCharacteristic));
 }
