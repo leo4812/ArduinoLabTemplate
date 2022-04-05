@@ -52,6 +52,8 @@
 #include "MP34DT05.hpp"
 #include "TDS_EC.hpp"
 #include "INA219.hpp"
+#include "ADS1115volt.hpp"
+
 
 
 
@@ -108,6 +110,8 @@ HTS221 *HTS221_sensor;
 MP34DT05 *MP34DT05_sensor;
 TDS_EC *TDS_EC_sensor;
 INA219 *INA219_sensor;
+ADS1115volt *ADS1115volt_sensor;
+
 
 
 
@@ -477,4 +481,11 @@ void init_sensors(BLEService service)
     INA219_sensor->CommandCharacteristic->setEventHandler(BLEWritten, INA219_sensor_command_callback);
     service.addCharacteristic(*(INA219_sensor->CommandCharacteristic));
     service.addCharacteristic(*(INA219_sensor->NotifyCharacteristic));
+
+    ADS1115volt_sensor = new ADS1115volt();
+    auto ADS1115volt_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { ADS1115volt_sensor->CommandHandler(device, characteristic); };
+    ADS1115volt_sensor->CommandCharacteristic->setEventHandler(BLEWritten, ADS1115volt_sensor_command_callback);
+    service.addCharacteristic(*(ADS1115volt_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(ADS1115volt_sensor->NotifyCharacteristic));
 }
