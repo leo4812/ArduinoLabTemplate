@@ -53,10 +53,7 @@
 #include "TDS_EC.hpp"
 #include "INA219.hpp"
 #include "ADS1115volt.hpp"
-
-
-
-
+#include "Termistor.hpp"
 
 LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
@@ -111,10 +108,7 @@ MP34DT05 *MP34DT05_sensor;
 TDS_EC *TDS_EC_sensor;
 INA219 *INA219_sensor;
 ADS1115volt *ADS1115volt_sensor;
-
-
-
-
+Termistor *Termistor_sensor;
 
 void init_sensors(BLEService service)
 {
@@ -488,4 +482,11 @@ void init_sensors(BLEService service)
     ADS1115volt_sensor->CommandCharacteristic->setEventHandler(BLEWritten, ADS1115volt_sensor_command_callback);
     service.addCharacteristic(*(ADS1115volt_sensor->CommandCharacteristic));
     service.addCharacteristic(*(ADS1115volt_sensor->NotifyCharacteristic));
+
+    Termistor_sensor = new Termistor();
+    auto Termistor_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { Termistor_sensor->CommandHandler(device, characteristic); };
+    Termistor_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Termistor_sensor_command_callback);
+    service.addCharacteristic(*(Termistor_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(Termistor_sensor->NotifyCharacteristic));
 }
