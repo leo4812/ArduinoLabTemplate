@@ -2,7 +2,7 @@
 #include "BaseSensor.hpp"
 #include "uFire_SHT20.h"
 
-//uFire_SHT20 sht20;
+// uFire_SHT20 sht20;
 
 class SHT20 : public BaseSensor
 {
@@ -39,10 +39,15 @@ private:
         }
         else
         {
-            
+
             memcpy(&buffer[1], (uint8_t *)&temp_c, 4);
             memcpy(&buffer[5], (uint8_t *)&hum, 4);
         }
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+
+        // Serial.print("Темп: ");
+        // Serial.print(temp_c);
+        // Serial.print("    Влаж: ");
+        // Serial.println(hum);
     }
 };

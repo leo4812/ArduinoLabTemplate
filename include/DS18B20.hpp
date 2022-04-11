@@ -20,7 +20,6 @@ public:
 private:
     void pre_loop()
     {
-        
     }
     void post_loop()
     {
@@ -36,5 +35,8 @@ private:
         };
         memcpy(&buffer[1], (uint8_t *)&temp, sizeof(temp));
         this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+
+        // Serial.print("Темп: ");
+        // Serial.println(temp);
     }
 };
