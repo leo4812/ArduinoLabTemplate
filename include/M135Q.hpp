@@ -2,8 +2,6 @@
 #include "BaseSensor.hpp"
 #include <TroykaMQ.h>
 
-
-
 class M135Q : public BaseSensor
 {
 
@@ -12,7 +10,6 @@ public:
 
     M135Q()
     {
-    
 
         this->Name = (char *)std::string("M135Q").c_str();
         this->IsAnalog = true;
@@ -30,7 +27,17 @@ private:
     void post_loop() {}
     void loop()
     {
-        float co2 = mq135->readCO2();
+        float co2;
+
+        if ((mq135->readCO2()) <= 351)
+        {
+            co2 = 351;
+        }
+        else
+        {
+            co2 = mq135->readCO2();
+        }
+
         uint16_t value = analogRead(this->AnalogPort);
 
         uint8_t buffer[8] = {
