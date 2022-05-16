@@ -8,7 +8,7 @@ class Sound : public BaseSensor
 {
 
 public:
-    VolAnalyzer *analyzer;
+    VolAnalyzer *analyzer = nullptr;
 
     volatile int inSound = 0;
 
@@ -35,13 +35,20 @@ private:
             if (this->analyzer->tick())
             {
                 inSound = this->analyzer->getMax();
-                outSound = map(inSound, 0, 650, 20, 110);
+                outSound = map(inSound, 100, 2100, 20, 110);
+                /*
+                Serial.print("IN: ");
+                Serial.print(inSound);
+                Serial.print("   OUT: ");
+                Serial.println(outSound);
+                */
             }
         }
     }
     void pre_loop()
     {
         this->analyzer = new VolAnalyzer(this->AnalogPort);
+
         this->analyzer->setVolK(20);
         this->analyzer->setTrsh(10);
         this->analyzer->setVolMin(10);
