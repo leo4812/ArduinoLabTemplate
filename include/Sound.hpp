@@ -8,7 +8,7 @@ class Sound : public BaseSensor
 {
 
 public:
-    VolAnalyzer *analyzer;
+    VolAnalyzer *analyzer = nullptr;
 
     volatile int inSound = 0;
 
@@ -41,14 +41,29 @@ private:
             if (this->analyzer->tick())
             {
                 inSound = this->analyzer->getMax();
+<<<<<<< HEAD
                 outSound = map(inSound, 0, 650, 20, 110);
                 Serial.println(inSound);
+=======
+                outSound = map(inSound, 100, 2100, 20, 110);
+                /*
+                Serial.print("IN: ");
+                Serial.print(inSound);
+                Serial.print("   OUT: ");
+                Serial.println(outSound);
+                */
+>>>>>>> 27be58b2e6702890b15a78d61feda2aff27cc38c
             }
         }
     }
     void pre_loop()
     {
+<<<<<<< HEAD
         // this->analyzer = new VolAnalyzer(this->AnalogPort); // Компилит но не работает (показания всегда 20-21)
+=======
+        this->analyzer = new VolAnalyzer(this->AnalogPort);
+
+>>>>>>> 27be58b2e6702890b15a78d61feda2aff27cc38c
         this->analyzer->setVolK(20);
         this->analyzer->setTrsh(10);
         this->analyzer->setVolMin(10);
