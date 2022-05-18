@@ -54,6 +54,7 @@
 #include "INA219.hpp"
 #include "ADS1115volt.hpp"
 #include "Termistor.hpp"
+#include "MutnoKol.hpp"
 
 LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
@@ -109,6 +110,7 @@ TDS_EC *TDS_EC_sensor;
 INA219 *INA219_sensor;
 ADS1115volt *ADS1115volt_sensor;
 Termistor *Termistor_sensor;
+MutnoKol *MutnoKol_sensor;
 
 void init_sensors(BLEService service)
 {
@@ -489,4 +491,11 @@ void init_sensors(BLEService service)
     Termistor_sensor->CommandCharacteristic->setEventHandler(BLEWritten, Termistor_sensor_command_callback);
     service.addCharacteristic(*(Termistor_sensor->CommandCharacteristic));
     service.addCharacteristic(*(Termistor_sensor->NotifyCharacteristic));
+
+    MutnoKol_sensor = new MutnoKol();
+    auto MutnoKol_sensor_command_callback = [](BLEDevice device, BLECharacteristic characteristic)
+    { MutnoKol_sensor->CommandHandler(device, characteristic); };
+    MutnoKol_sensor->CommandCharacteristic->setEventHandler(BLEWritten, MutnoKol_sensor_command_callback);
+    service.addCharacteristic(*(MutnoKol_sensor->CommandCharacteristic));
+    service.addCharacteristic(*(MutnoKol_sensor->NotifyCharacteristic));
 }
