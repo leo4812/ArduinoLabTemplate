@@ -1,20 +1,20 @@
+arduino-libraries/Arduino_LSM9DS1@^1.1.0
+amperka/TroykaMQ@^1.0.0
+HX711 Arduino Library
+u-fire/uFire SHT20@^1.1.1
+adafruit/Adafruit BMP085 Library@^1.2.1
+Adafruit ADS1X15
+paulstoffregen/Time@^1.6.1
+adafruit/Adafruit INA219@^1.2.0
+arduino-libraries/ArduinoBLE@^1.2.1
+ClimateGuard RadSens
+mbed-sgrsn/Adafruit_TCS34725@0.0.0+sha.1bf53b314b01
+gyverlibs/VolAnalyzer@^1.8
+northernwidget/DS3231@^1.1.0
+arduino-libraries/Arduino_LPS22HB@^1.0.2
+adafruit/Adafruit BusIO@^1.9.8
 arduino-libraries/Arduino_HTS221@^1.0.0
 adameat/MaximWire@^1.0.3
-iarduino I2C TDS
-Adafruit ADS1X15
-adafruit/Adafruit BMP085 Library@^1.2.1
-adafruit/Adafruit BusIO@^1.9.8
-gyverlibs/VolAnalyzer@^1.8
-sparkfun/SparkFun MAX3010x Pulse and Proximity Sensor Library@^1.1.1
-mbed-sgrsn/Adafruit_TCS34725@0.0.0+sha.1bf53b314b01
-amperka/TroykaMQ@^1.0.0
-adafruit/Adafruit INA219@^1.2.0
 adafruit/Adafruit MAX31855 library@^1.3.0
-arduino-libraries/Arduino_LSM9DS1@^1.1.0
-HX711 Arduino Library
-arduino-libraries/Arduino_LPS22HB@^1.0.2
-paulstoffregen/Time@^1.6.1
-northernwidget/DS3231@^1.1.0
-arduino-libraries/ArduinoBLE@^1.2.1
-u-fire/uFire SHT20@^1.1.1
-ClimateGuard RadSens
+iarduino I2C TDS
+sparkfun/SparkFun MAX3010x Pulse and Proximity Sensor Library@^1.1.1
