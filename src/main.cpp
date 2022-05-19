@@ -7,7 +7,7 @@ BLEService MainService("2086C901-9167-4F23-8A7A-F514BD665227");
 void setup()
 {  
   analogReadResolution(12);
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   if (BLE.begin())
   {
