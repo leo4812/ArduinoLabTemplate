@@ -31,9 +31,9 @@ private:
     {
         while (doWork)
         {
-            if (Serial.available())
+            if (Serial1.available())
             {
-                String str = Serial.readString(); // Принимаем строку в порт и приравниваем ее к нашей строке str
+                String str = Serial1.readString(); // Принимаем строку в порт и приравниваем ее к нашей строке str
                 // int Kolvo = str.length();         // Общее количество символов в принятой строке
 
                 int8_t delOne;  // Индекс разделителя между GUID и KodOshibki
@@ -84,7 +84,7 @@ private:
 
     void pre_loop()
     {
-        //Serial.begin(9600);
+        Serial1.begin(9600);
 
         doWork = true;
 
@@ -101,7 +101,7 @@ private:
         Start += 0;
         Start += delimiter;
         Start += 2;
-        Serial.println(Start); // Команда на старт мутнокола
+        Serial1.println(Start); // Команда на старт мутнокола
     }
 
     void post_loop()
@@ -116,7 +116,7 @@ private:
         Stop += 0;
         Stop += delimiter;
         Stop += 2;
-        Serial.println(Stop); // Команда на стоп мутнокола
+        Serial1.println(Stop); // Команда на стоп мутнокола
 
         doWork = false;
         if (runThread != nullptr)
