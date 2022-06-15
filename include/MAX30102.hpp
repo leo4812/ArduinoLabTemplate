@@ -71,6 +71,8 @@ private:
                 sinus = ir;
                 BPM = beatAvg;
             }
+            Serial.println(millis());
+            /*
             Serial.println(sinus);
 
             uint8_t buffer[9] = {
@@ -79,6 +81,7 @@ private:
             memcpy(&buffer[1], (uint8_t *)&sinus, 4);
             memcpy(&buffer[5], (uint8_t *)&BPM, 4);
             this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+            */
         }
     }
 
