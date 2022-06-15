@@ -71,7 +71,7 @@ private:
                 sinus = ir;
                 BPM = beatAvg;
             }
-            Serial.println(millis());
+            Serial.println(sinus);
             /*
             Serial.println(sinus);
 
