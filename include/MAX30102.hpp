@@ -21,10 +21,13 @@ public:
     byte rates[6]; // Array of heart rates
     byte rateSpot = 0;
 
+    volatile uint32_t ir = 0;
+
     volatile uint32_t sinus = 0; // Переменная синусойды
-    volatile uint32_t BPM = 0;   // Переменная усредненного количества ЧСС
+    volatile uint8_t BPM = 0;    // Переменная усредненного количества ЧСС
 
     Thread *runThread;
+    Thread *bpmThread;
 
     bool doWork = true;
 
@@ -33,7 +36,7 @@ public:
 
         this->Name = (char *)std::string("MAX30102").c_str();
         CommandCharacteristic = new BLECharacteristic("9abe01bf-55d3-4ae2-bc09-edb1a6c209c7", BLERead | BLEWrite, DIGITAL_COMMAND_SIZE, true);
-        NotifyCharacteristic = new BLECharacteristic("ccf0279b-f3c5-4366-8b65-5dfd2d6741f8", BLERead | BLENotify, 9, true);
+        NotifyCharacteristic = new BLECharacteristic("ccf0279b-f3c5-4366-8b65-5dfd2d6741f8", BLERead | BLENotify, 22, true);
     }
 
 private:
@@ -41,7 +44,7 @@ private:
     {
         while (doWork)
         {
-            auto ir = particleSensor.getIR();
+
             /*
                         if (checkForBeat(ir) == true)
                         {
@@ -61,27 +64,43 @@ private:
                             }
                         }
             */
-            if (ir < 50000)
-            {
-                sinus = 0;
-                BPM = 0;
-            }
-            else
-            {
-                sinus = ir;
-                BPM = beatAvg;
-            }
-            Serial.println(sinus);
-            /*
-            Serial.println(sinus);
 
-            uint8_t buffer[9] = {
+            uint32_t ValueArray[5] = {
                 0,
             };
-            memcpy(&buffer[1], (uint8_t *)&sinus, 4);
-            memcpy(&buffer[5], (uint8_t *)&BPM, 4);
+            for (int i = 0; i < 5; i++)
+            {
+                ir = particleSensor.getIR();
+                if (ir < 50000)
+                {
+                    sinus = 0;
+                    // BPM = 0;
+                }
+                else
+                {
+                    sinus = ir;
+                    // BPM = beatAvg;
+                }
+                ValueArray[i] = sinus;
+            }
+
+            uint8_t buffer[22] = {
+                0,
+            };
+            memcpy(&buffer[2], (uint8_t *)&ValueArray[0], 4);
+            memcpy(&buffer[6], (uint8_t *)&ValueArray[1], 4);
+            memcpy(&buffer[10], (uint8_t *)&ValueArray[2], 4);
+            memcpy(&buffer[14], (uint8_t *)&ValueArray[3], 4);
+            memcpy(&buffer[18], (uint8_t *)&ValueArray[4], 4);
             this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
-            */
+        }
+    }
+
+    void execute_bpm()
+    {
+        while (doWork)
+        {
+            // БЛА БЛА БЛА поток
         }
     }
 
@@ -90,6 +109,9 @@ private:
         doWork = true;
         runThread = new Thread();
         runThread->start(callback(this, &MAX30102::execute));
+
+        bpmThread = new Thread();
+        bpmThread->start(callback(this, &MAX30102::execute_bpm));
 
         Serial.begin(9600);
         particleSensor.begin(Wire, I2C_SPEED_FAST);
@@ -116,6 +138,10 @@ private:
         if (runThread != nullptr)
         {
             runThread = nullptr;
+        }
+        if (bpmThread != nullptr)
+        {
+            bpmThread = nullptr;
         }
     }
     void loop()
