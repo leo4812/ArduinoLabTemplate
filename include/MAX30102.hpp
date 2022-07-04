@@ -144,13 +144,15 @@ private:
             if (beatsPerMinute < 255 && beatsPerMinute > 20)
             {
                 rates[rateSpot++] = (byte)beatsPerMinute; // Store this reading in the array
-                rateSpot %= 100;                          // Wrap variable
+                rateSpot %= 10;                           // Wrap variable
 
                 // Take average of readings
                 beatAvg = 0;
-                for (byte x = 0; x < 100; x++)
+                for (byte x = 0; x < 10; x++)
+                {
                     beatAvg += rates[x];
-                beatAvg /= 100;
+                }
+                beatAvg /= 10;
             }
         }
         BPM = beatAvg;
