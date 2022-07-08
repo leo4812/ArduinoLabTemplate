@@ -30,13 +30,24 @@ private:
 
         float temp = dallas.GetTemperature<float>(line);
         dallas.Update(line);
-        uint8_t buffer[5] = {
+
+        uint8_t buffer[5]{
             0,
         };
-        memcpy(&buffer[1], (uint8_t *)&temp, sizeof(temp));
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        buffer[0] = 0;
+        memcpy(&buffer[1], (uint8_t *)&temp, 4);
 
-        // Serial.print("Темп: ");
-        // Serial.println(temp);
+        if (flagSerial == true)
+        {
+            String b = buffToHex(&buffer[0], 5);
+            String Val = "8103F9B3-C91E-47CD-8634-4B7D8F4D018D";
+            Val += ";";
+            Val += b;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

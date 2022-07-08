@@ -5,11 +5,15 @@
 //#include <mbed.h>
 #include <sstream>
 #include <iomanip>
+#include "HEX.hpp"
 using namespace mbed;
 using namespace rtos;
 
 #define ANALOG_COMMAND_SIZE 6
 #define DIGITAL_COMMAND_SIZE 5
+
+volatile bool flagSerial = false;
+
 class BaseSensor
 {
 public:
@@ -44,6 +48,30 @@ public:
         else
         {
             printf("Stopping %s\n", this->Name);
+            if (this->run_thread)
+            {
+                this->run_thread->terminate();
+                delete this->run_thread;
+                this->post_loop();
+            }
+        }
+    }
+    void SerialHandler(int start, uint32_t interval, uint8_t port = 0)
+    {
+        if (start == 1)
+        {
+            flagSerial = true;
+            this->PoolingInterval = interval;
+            if (this->IsAnalog)
+            {
+                this->AnalogPort = port == 0x00 ? A0 : A1;
+            }
+            this->run_thread = new Thread();
+            this->run_thread->start(callback(this, &BaseSensor::execute));
+        }
+        else
+        {
+            flagSerial = false;
             if (this->run_thread)
             {
                 this->run_thread->terminate();
