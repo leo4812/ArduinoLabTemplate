@@ -19,7 +19,6 @@ Queue<message_t, 10> serial_queue;
 
 int split(String str, String *result)
 {
-  // String strs[20];
   int StringCount = 0;
 
   while (str.length() > 0)
