@@ -2,7 +2,7 @@
 #include "BaseSensor.hpp"
 #include "uFire_SHT20.h"
 
-//uFire_SHT20 sht20;
+// uFire_SHT20 sht20;
 
 class SHT20 : public BaseSensor
 {
@@ -39,15 +39,22 @@ private:
         }
         else
         {
-            
+            buffer[0] = 0;
             memcpy(&buffer[1], (uint8_t *)&temp_c, 4);
             memcpy(&buffer[5], (uint8_t *)&hum, 4);
         }
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 9);
 
-        //Serial.print("Темп: ");
-        //Serial.print(temp_c);
-        //Serial.print("    Влаж: ");
-        //Serial.println(hum);
+            String Val = "fab12fa3-f2ad-4fa4-b79a-b41af0d1abe6";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

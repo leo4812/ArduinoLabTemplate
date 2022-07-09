@@ -32,11 +32,11 @@ private:
 
         if (flagSerial == true)
         {
-            String b = buffToHex(&buffer[0], 6);
+            String strHEX = buffToHex(&buffer[0], 6);
 
             String Val = "EF8A1B0B-1005-4DAD-B49D-75F84488E52C";
             Val += ";";
-            Val += b;
+            Val += strHEX;
             Serial.println(Val);
         }
         else

@@ -32,7 +32,19 @@ private:
         uint8_t buffer[5] = {
             0,
         };
+        buffer[0] = 0;
         memcpy(&buffer[1], (uint8_t *)&adc_01_voltage, sizeof(adc_01_voltage));
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 5);
+            String Val = "A9DB1E58-3634-4A1E-9597-5FAD370E38C6";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

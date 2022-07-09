@@ -22,9 +22,23 @@ private:
     void loop()
     {
         uint32_t value = analogRead(this->AnalogPort);
-        uint8_t buffer[6] = { 0, };
+        uint8_t buffer[6] = {
+            0,
+        };
+        buffer[0] = 0;
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
         memcpy(&buffer[2], &value, sizeof(value));
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 6);
+            String Val = "9B264AE2-98F1-4905-A495-C15113A0D35B";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };
