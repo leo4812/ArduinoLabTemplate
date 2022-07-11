@@ -7,7 +7,7 @@ class TDS_EC : public BaseSensor
 {
 
 public:
-    iarduino_I2C_TDS* tds;                       //   Объявляем объект tds  для работы с функциями и методами библиотеки iarduino_I2C_TDS, указывая адрес модуля на шине I2C.
+    iarduino_I2C_TDS *tds; //   Объявляем объект tds  для работы с функциями и методами библиотеки iarduino_I2C_TDS, указывая адрес модуля на шине I2C.
 
     TDS_EC()
     {
@@ -28,14 +28,27 @@ private:
 
         tds->set_t(25.0f); //   Указываем текущую температуру жидкости.
 
-        uint32_t EC = tds->getEC();  //Микросименс на см
-        uint32_t TDS = tds->getTDS();  //PPM
+        uint32_t EC = tds->getEC();   //Микросименс на см
+        uint32_t TDS = tds->getTDS(); // PPM
 
         uint8_t buffer[9] = {
             0,
         };
+        buffer[0] = 0;
         memcpy(&buffer[1], (uint8_t *)&EC, 4);
         memcpy(&buffer[5], (uint8_t *)&TDS, 4);
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 9);
+
+            String Val = "7a6cd389-e947-49ba-b135-f17735ed5cb8";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

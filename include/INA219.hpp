@@ -64,7 +64,18 @@ private:
             // Serial.print(current_mA);
             // Serial.println(" mA");
         }
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 5);
 
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+            String Val = "38c20915-7132-4e1b-9664-3ada1ea5be86";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

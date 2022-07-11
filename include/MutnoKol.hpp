@@ -27,7 +27,7 @@ public:
     }
 
 private:
-    void execute()
+    void execute() ////////////////////////////////  ПЕРЕПИСАТЬ ВЕСЬ ПОТОК ПРИЕМА ПОД HEX   /////////////////////////////////////////////////
     {
         while (doWork)
         {
@@ -135,10 +135,23 @@ private:
         uint8_t buffer[17] = {
             0,
         };
+        buffer[0] = 0;
         memcpy(&buffer[1], (uint8_t *)&Red, 4);
         memcpy(&buffer[5], (uint8_t *)&Green, 4);
         memcpy(&buffer[9], (uint8_t *)&Blue, 4);
         memcpy(&buffer[13], (uint8_t *)&IK, 4);
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 17);
+
+            String Val = strNotifyCharacteristic;
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

@@ -61,7 +61,18 @@ private:
             //   Serial.print(u);
             //   Serial.println(" V");
         }
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 5);
 
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+            String Val = "cc86ef9f-242f-444c-8dc0-798fde983d97";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

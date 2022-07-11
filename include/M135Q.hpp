@@ -43,12 +43,22 @@ private:
         uint8_t buffer[8] = {
             0,
         };
-
+        buffer[0] = 0;
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
-
         memcpy(&buffer[2], (uint8_t *)&co2, 4);
+        memcpy(&buffer[6], (uint8_t *)&value, 2);
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 8);
 
-        memcpy(&buffer[6], &value, 2);
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+            String Val = "faf4a198-44c3-4154-94f3-6730e2045fb4";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

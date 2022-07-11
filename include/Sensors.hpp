@@ -56,7 +56,7 @@
 #include "Termistor.hpp"
 #include "MutnoKol.hpp"
 
-const uint16_t TotalSensors = 6;
+const uint16_t TotalSensors = 20;
 
 LPS22HB *LPS22HB_sensor;
 MagnetPole *MagnetPole_sensor;
@@ -509,5 +509,18 @@ void init_sensors(BLEService service)
     sensors[3] = Pcl_sensor;
     sensors[4] = PH_sensor;
     sensors[5] = SHT20_sensor;
-
+    sensors[6] = BLUXV30B_sensor;
+    sensors[7] = Termistor_sensor;
+    sensors[8] = TDS_EC_sensor;
+    sensors[9] = Sound_sensor;
+    sensors[10] = SoilMoisture_sensor;
+    sensors[11] = M135Q_sensor;
+    sensors[12] = MPX5700DP_sensor;
+    sensors[13] = ADS1115volt_sensor;
+    sensors[14] = INA219_sensor;
+    sensors[15] = Uskor_sensor;
+    sensors[16] = Giro_sensor;
+    sensors[17] = Kompas_sensor;
+    sensors[18] = MutnoKol_sensor;
+    sensors[19] = M7Q_sensor;
 }

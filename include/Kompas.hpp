@@ -22,16 +22,29 @@ private:
     void post_loop() {}
     void loop()
     {
-        float  xm, ym, zm;
+        float xm, ym, zm;
 
         IMU.readMagneticField(xm, ym, zm);
 
         uint8_t buffer[13] = {
             0,
         };
+        buffer[0] = 0;
         memcpy(&buffer[1], (uint8_t *)&xm, 4);
         memcpy(&buffer[5], (uint8_t *)&ym, 4);
         memcpy(&buffer[9], (uint8_t *)&zm, 4);
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 13);
+
+            String Val = "06543ba4-c183-4970-a1b9-6b0dfea20afb";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };

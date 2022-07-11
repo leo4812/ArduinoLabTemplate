@@ -47,24 +47,34 @@ private:
     void post_loop() {}
     void loop()
     {
-        float co = MQGetGasPercentage(MQRead(this->AnalogPort)/Ro,GAS_CARBON_MONOXIDE);
+        float co = MQGetGasPercentage(MQRead(this->AnalogPort) / Ro, GAS_CARBON_MONOXIDE);
         uint16_t value = analogRead(this->AnalogPort);
-
-        Serial.print("Пощитаное значение: ");
-        Serial.print(co);
-        Serial.print("     Попугаи: ");
-        Serial.println(value);
-
+        /*
+                Serial.print("Пощитаное значение: ");
+                Serial.print(co);
+                Serial.print("     Попугаи: ");
+                Serial.println(value);
+        */
         uint8_t buffer[8] = {
             0,
         };
-
+        buffer[0] = 0;
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
-
         memcpy(&buffer[2], (uint8_t *)&co, 4);
+        memcpy(&buffer[6], (uint8_t *)&value, 2);
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 8);
 
-        memcpy(&buffer[6], &value, 2);
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+            String Val = "A93C4467-02F7-45AE-87E6-3BA799560BD5";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 
     float MQResistanceCalculation(int raw_adc)

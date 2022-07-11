@@ -29,9 +29,22 @@ private:
         uint8_t buffer[13] = {
             0,
         };
+        buffer[0] = 0;
         memcpy(&buffer[1], (uint8_t *)&xa, 4);
         memcpy(&buffer[5], (uint8_t *)&ya, 4);
         memcpy(&buffer[9], (uint8_t *)&za, 4);
-        this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        if (flagSerial == true)
+        {
+            String strHEX = buffToHex(&buffer[0], 13);
+
+            String Val = "3b94eab6-6c4e-4d53-babc-09efd1442ee9";
+            Val += ";";
+            Val += strHEX;
+            Serial.println(Val);
+        }
+        else
+        {
+            this->NotifyCharacteristic->writeValue(buffer, sizeof(buffer));
+        }
     }
 };
