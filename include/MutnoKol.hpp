@@ -84,7 +84,7 @@ private:
 
     void pre_loop()
     {
-        Serial1.begin(9600);
+        Serial1.begin(115200);
 
         doWork = true;
 
