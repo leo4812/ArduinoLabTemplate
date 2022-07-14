@@ -40,7 +40,7 @@ private:
         s[0] = 0;
         memcpy(&s[1], &lux, sizeof(lux));
 
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String strHEX = buffToHex(&s[0], 5);
 

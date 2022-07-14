@@ -33,7 +33,7 @@ private:
         memcpy(&buffer[1], (uint8_t *)&xa, 4);
         memcpy(&buffer[5], (uint8_t *)&ya, 4);
         memcpy(&buffer[9], (uint8_t *)&za, 4);
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String strHEX = buffToHex(&buffer[0], 13);
 

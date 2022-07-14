@@ -30,7 +30,7 @@ private:
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
         memcpy(&buffer[2], (uint8_t *)&value, 4);
 
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String strHEX = buffToHex(&buffer[0], 6);
 

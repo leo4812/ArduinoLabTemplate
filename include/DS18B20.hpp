@@ -37,7 +37,7 @@ private:
         buffer[0] = 0;
         memcpy(&buffer[1], (uint8_t *)&temp, 4);
 
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String b = buffToHex(&buffer[0], 5);
             String Val = "8103F9B3-C91E-47CD-8634-4B7D8F4D018D";

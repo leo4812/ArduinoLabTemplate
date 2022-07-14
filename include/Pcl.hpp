@@ -34,7 +34,7 @@ private:
         };
         buffer[0] = 0;
         memcpy(&buffer[1], (uint8_t *)&adc_01_voltage, sizeof(adc_01_voltage));
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String strHEX = buffToHex(&buffer[0], 5);
             String Val = "A9DB1E58-3634-4A1E-9597-5FAD370E38C6";

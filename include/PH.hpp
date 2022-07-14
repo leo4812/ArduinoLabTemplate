@@ -28,7 +28,7 @@ private:
         buffer[0] = 0;
         buffer[1] = this->AnalogPort == A0 ? 0x00 : 0x01;
         memcpy(&buffer[2], &value, sizeof(value));
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String strHEX = buffToHex(&buffer[0], 6);
             String Val = "9B264AE2-98F1-4905-A495-C15113A0D35B";

@@ -64,7 +64,7 @@ private:
             // Serial.print(current_mA);
             // Serial.println(" mA");
         }
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String strHEX = buffToHex(&buffer[0], 5);
 

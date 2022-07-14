@@ -61,7 +61,7 @@ private:
             //   Serial.print(u);
             //   Serial.println(" V");
         }
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             String strHEX = buffToHex(&buffer[0], 5);
 
