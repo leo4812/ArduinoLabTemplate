@@ -158,7 +158,7 @@ private:
 
     void loop()
     {
-        if (flagSerial == true)
+        if (this->isSerialConnection)
         {
             Serial.println(strMutnokol);
         }

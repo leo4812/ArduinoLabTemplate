@@ -12,8 +12,6 @@ using namespace rtos;
 #define ANALOG_COMMAND_SIZE 6
 #define DIGITAL_COMMAND_SIZE 5
 
-volatile bool flagSerial = false;
-
 class BaseSensor
 {
 public:
@@ -26,6 +24,7 @@ public:
     uint32_t PoolingInterval = 0;
     uint8_t AnalogPort = 0;
     char *Name = nullptr;
+    bool isSerialConnection = false;
     void CommandHandler(BLEDevice device, BLECharacteristic characteristic)
     {
         uint8_t buffer[8];
@@ -60,7 +59,7 @@ public:
     {
         if (start == 1)
         {
-            flagSerial = true;
+            this->isSerialConnection = true;
             this->PoolingInterval = interval;
             if (this->IsAnalog)
             {
@@ -71,7 +70,7 @@ public:
         }
         else
         {
-            flagSerial = false;
+            this->isSerialConnection = false;
             if (this->run_thread)
             {
                 this->run_thread->terminate();
